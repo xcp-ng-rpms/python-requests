@@ -1,6 +1,6 @@
 Name:           python-requests
-Version:        0.5.1
-Release:        2%{?dist}
+Version:        0.6.0
+Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ISC
@@ -43,6 +43,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Aug 20 2011 Arun SAG <sagarun@gmail.com> - 0.6.0-1
+- Updated to latest version 0.6.0
+
 * Mon Aug 15 2011 Arun SAG <sagarun@gmail.com> - 0.5.1-2
 - Remove OPT_FLAGS from build section since it is a noarch package
 - Fix use of mixed tabs and space
