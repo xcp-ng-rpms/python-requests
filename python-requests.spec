@@ -1,5 +1,5 @@
 Name:           python-requests
-Version:        0.6.0
+Version:        0.6.1
 Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
@@ -43,6 +43,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Aug 26 2011 Arun SAG <sagarun@gmail.com> - 0.6.1-1
+- Updated to version 0.6.1
+
 * Sat Aug 20 2011 Arun SAG <sagarun@gmail.com> - 0.6.0-1
 - Updated to latest version 0.6.0
 
