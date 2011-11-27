@@ -1,5 +1,5 @@
 Name:           python-requests
-Version:        0.7.6
+Version:        0.8.2
 Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
@@ -35,14 +35,21 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/*.egg-info
 %dir %{python_sitelib}/requests
 %dir %{python_sitelib}/requests/packages
-%dir %{python_sitelib}/requests/packages/poster
+%dir %{python_sitelib}/requests/packages/oreos
+%dir %{python_sitelib}/requests/packages/urllib3
 %{python_sitelib}/requests/packages/*.py*
-%{python_sitelib}/requests/packages/poster/*.py*
+%{python_sitelib}/requests/packages/oreos/*.py*
+%{python_sitelib}/requests/packages/urllib3/*.py*
 %{python_sitelib}/requests/*.py*
 
 
 
 %changelog
+* Sun Nov 27 2011 Arun SAG <sagarun@gmail.com> - 0.8.2-1
+- New upstream version
+- keep alive support
+- complete removal of cookiejar and urllib2
+
 * Thu Nov 10 2011 Arun SAG <sagarun@gmail.com> - 0.7.6-1
 - Updated to new upstream release 0.7.6
 
