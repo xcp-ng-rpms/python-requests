@@ -1,6 +1,6 @@
 Name:           python-requests
-Version:        0.8.2
-Release:        2%{?dist}
+Version:        0.9.3
+Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ISC
@@ -9,6 +9,7 @@ Source0:        http://pypi.python.org/packages/source/r/requests/requests-%{ver
 
 BuildArch:      noarch
 BuildRequires:  python-devel
+Requires:       python-gevent
 
 %description
 Most existing Python modules for sending HTTP requests are extremely verbose and 
@@ -19,7 +20,9 @@ designed to make HTTP requests easy for developers.
 
 %prep
 %setup -q -n requests-%{version}
-
+sed -i 's|#!/usr/bin/env python||' requests/setup.py
+sed -i 's|#!/usr/bin/env python||' requests/test_requests.py
+sed -i  's|#!/usr/bin/env python||' requests/test_requests_ext.py
 
 %build
 %{__python} setup.py build
@@ -31,20 +34,29 @@ rm -rf $RPM_BUILD_ROOT
 
  
 %files
+%defattr(-,root,root,-)
 %doc LICENSE README.rst HISTORY.rst
 %{python_sitelib}/*.egg-info
 %dir %{python_sitelib}/requests
 %dir %{python_sitelib}/requests/packages
 %dir %{python_sitelib}/requests/packages/oreos
 %dir %{python_sitelib}/requests/packages/urllib3
+%dir %{python_sitelib}/requests/packages/urllib3/packages
+%dir %{python_sitelib}/requests/packages/urllib3/packages/ssl_match_hostname
 %{python_sitelib}/requests/packages/*.py*
 %{python_sitelib}/requests/packages/oreos/*.py*
 %{python_sitelib}/requests/packages/urllib3/*.py*
+%{python_sitelib}/requests/packages/urllib3/packages/*.py*
+%{python_sitelib}/requests/packages/urllib3/packages/ssl_match_hostname/*.py*
 %{python_sitelib}/requests/*.py*
 
 
-
 %changelog
+* Sat Jan 21 2012 Arun SAG <sagarun@gmail.com> - 0.9.3-1
+- Updated to new upstream version 0.9.3
+- Include python-gevent as a dependency for requests.async
+- Clean up shebangs in requests/setup.py,test_requests.py and test_requests_ext.py
+
 * Sat Jan 14 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.8.2-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
 
