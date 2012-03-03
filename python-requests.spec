@@ -1,9 +1,9 @@
 Name:           python-requests
-Version:        0.9.3
+Version:        0.10.6
 Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
-License:        ISC
+License:        ISC and MIT
 URL:            http://pypi.python.org/pypi/requests
 Source0:        http://pypi.python.org/packages/source/r/requests/requests-%{version}.tar.gz
 
@@ -20,9 +20,6 @@ designed to make HTTP requests easy for developers.
 
 %prep
 %setup -q -n requests-%{version}
-sed -i 's|#!/usr/bin/env python||' requests/setup.py
-sed -i 's|#!/usr/bin/env python||' requests/test_requests.py
-sed -i  's|#!/usr/bin/env python||' requests/test_requests_ext.py
 
 %build
 %{__python} setup.py build
@@ -35,23 +32,16 @@ rm -rf $RPM_BUILD_ROOT
  
 %files
 %defattr(-,root,root,-)
-%doc LICENSE README.rst HISTORY.rst
+%doc NOTICE LICENSE README.rst HISTORY.rst
 %{python_sitelib}/*.egg-info
 %dir %{python_sitelib}/requests
-%dir %{python_sitelib}/requests/packages
-%dir %{python_sitelib}/requests/packages/oreos
-%dir %{python_sitelib}/requests/packages/urllib3
-%dir %{python_sitelib}/requests/packages/urllib3/packages
-%dir %{python_sitelib}/requests/packages/urllib3/packages/ssl_match_hostname
-%{python_sitelib}/requests/packages/*.py*
-%{python_sitelib}/requests/packages/oreos/*.py*
-%{python_sitelib}/requests/packages/urllib3/*.py*
-%{python_sitelib}/requests/packages/urllib3/packages/*.py*
-%{python_sitelib}/requests/packages/urllib3/packages/ssl_match_hostname/*.py*
-%{python_sitelib}/requests/*.py*
+%{python_sitelib}/requests/*
 
 
 %changelog
+* Sat Mar 3 2012 Arun SAG <sagarun@gmail.com> - 0.10.6-1
+- Updated to new upstream version
+
 * Sat Jan 21 2012 Arun SAG <sagarun@gmail.com> - 0.9.3-1
 - Updated to new upstream version 0.9.3
 - Include python-gevent as a dependency for requests.async
