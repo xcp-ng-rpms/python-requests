@@ -1,6 +1,12 @@
+%if 0%{?fedora} > 12 || 0%{?rhel} > 6
+%global _with_python3 1
+%else
+%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print (get_python_lib())")}
+%endif
+
 Name:           python-requests
 Version:        0.10.6
-Release:        1%{?dist}
+Release:        3%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ISC and MIT
@@ -9,7 +15,10 @@ Source0:        http://pypi.python.org/packages/source/r/requests/requests-%{ver
 
 BuildArch:      noarch
 BuildRequires:  python-devel
+
+%if 0%{?fedora}
 Requires:       python-gevent
+%endif
 
 %description
 Most existing Python modules for sending HTTP requests are extremely verbose and 
@@ -17,17 +26,34 @@ cumbersome. Python’s built-in urllib2 module provides most of the HTTP
 capabilities you should need, but the API is thoroughly broken. This library is 
 designed to make HTTP requests easy for developers.
 
+%if 0%{?_with_python3}
+%package -n python3-requests
+Summary: HTTP library, written in Python, for human beings
+BuildRequires: python3-devel
+%description -n python3-requests
+Most existing Python modules for sending HTTP requests are extremely verbose and
+cumbersome. Python’s built-in urllib2 module provides most of the HTTP
+capabilities you should need, but the API is thoroughly broken. This library is
+designed to make HTTP requests easy for developers.
+%endif
+
 
 %prep
 %setup -q -n requests-%{version}
 
 %build
 %{__python} setup.py build
+%if 0%{?_with_python3}
+%{__python3} setup.py build
+%endif
 
 
 %install
 rm -rf $RPM_BUILD_ROOT
 %{__python} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
+%if 0%{?_with_python3}
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
+%endif
 
  
 %files
@@ -37,8 +63,20 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{python_sitelib}/requests
 %{python_sitelib}/requests/*
 
+%if 0%{?_with_python3}
+%files -n python3-requests
+%{python3_sitelib}/*.egg-info
+%{python3_sitelib}/requests/
+%endif
+
 
 %changelog
+* Thu Mar 29 2012 Arun S A G <sagarun@gmail.com> 0.10.6-3
+- Support building package for EL6
+
+* Tue Mar 27 2012 Rex Dieter <rdieter@fedoraproject.org> 0.10.6-2
+- +python3-requests pkg
+
 * Sat Mar 3 2012 Arun SAG <sagarun@gmail.com> - 0.10.6-1
 - Updated to new upstream version
 
