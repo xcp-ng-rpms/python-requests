@@ -5,8 +5,8 @@
 %endif
 
 Name:           python-requests
-Version:        0.10.6
-Release:        3%{?dist}
+Version:        0.11.1
+Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ISC and MIT
@@ -71,6 +71,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Apr 01 2012 Arun S A G <sagarun@gmail.com> 0.11.1-1
+- Updated to upstream release 0.11.1
+
 * Thu Mar 29 2012 Arun S A G <sagarun@gmail.com> 0.10.6-3
 - Support building package for EL6
 
