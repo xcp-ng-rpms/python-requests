@@ -6,7 +6,7 @@
 
 Name:           python-requests
 Version:        0.11.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ISC and MIT
@@ -16,6 +16,7 @@ Source0:        http://pypi.python.org/packages/source/r/requests/requests-%{ver
 BuildArch:      noarch
 BuildRequires:  python-devel
 
+Requires:       python-certifi
 %if 0%{?fedora}
 Requires:       python-gevent
 %endif
@@ -71,6 +72,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Apr 08 2012 Arun S A G <sagarun@gmail.com> 0.11.1-2
+- Requires python-certifi for https processing
+
 * Sun Apr 01 2012 Arun S A G <sagarun@gmail.com> 0.11.1-1
 - Updated to upstream release 0.11.1
 
