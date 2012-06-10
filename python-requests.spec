@@ -5,8 +5,8 @@
 %endif
 
 Name:           python-requests
-Version:        0.11.1
-Release:        2%{?dist}
+Version:        0.13.1
+Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ISC and MIT
@@ -16,10 +16,7 @@ Source0:        http://pypi.python.org/packages/source/r/requests/requests-%{ver
 BuildArch:      noarch
 BuildRequires:  python-devel
 
-Requires:       python-certifi
-%if 0%{?fedora}
-Requires:       python-gevent
-%endif
+Requires:       ca-certificates
 
 %description
 Most existing Python modules for sending HTTP requests are extremely verbose and 
@@ -31,11 +28,14 @@ designed to make HTTP requests easy for developers.
 %package -n python3-requests
 Summary: HTTP library, written in Python, for human beings
 BuildRequires: python3-devel
+Requires: python3-chardet
 %description -n python3-requests
 Most existing Python modules for sending HTTP requests are extremely verbose and
 cumbersome. Python’s built-in urllib2 module provides most of the HTTP
 capabilities you should need, but the API is thoroughly broken. This library is
 designed to make HTTP requests easy for developers.
+%else
+Requires: python-chardet
 %endif
 
 
@@ -72,8 +72,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Sun Apr 08 2012 Arun S A G <sagarun@gmail.com> 0.11.1-2
-- Requires python-certifi for https processing
+* Sun Jun 10 2012 Arun S A G <sagarun@gmail.com> 0.13.1-1
+- Updated to latest upstream release 0.13.1
+- Use system provided ca-certificates
+- No more async requests use grrequests https://github.com/kennethreitz/grequests
+- Remove gevent as it is no longer required by requests
 
 * Sun Apr 01 2012 Arun S A G <sagarun@gmail.com> 0.11.1-1
 - Updated to upstream release 0.11.1
