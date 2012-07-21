@@ -6,7 +6,7 @@
 
 Name:           python-requests
 Version:        0.13.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ISC and MIT
@@ -72,6 +72,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Jul 21 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.13.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
 * Sun Jun 10 2012 Arun S A G <sagarun@gmail.com> 0.13.1-1
 - Updated to latest upstream release 0.13.1
 - Use system provided ca-certificates
