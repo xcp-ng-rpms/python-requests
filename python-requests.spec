@@ -3,10 +3,11 @@
 %else
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print (get_python_lib())")}
 %endif
-
+# Turn off the brp-python-bytecompile script
+#%global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
 Name:           python-requests
-Version:        0.13.1
-Release:        3%{?dist}
+Version:        0.14.1
+Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ISC and MIT
@@ -14,7 +15,7 @@ URL:            http://pypi.python.org/pypi/requests
 Source0:        http://pypi.python.org/packages/source/r/requests/requests-%{version}.tar.gz
 
 BuildArch:      noarch
-BuildRequires:  python-devel
+BuildRequires:  python2-devel
 
 Requires:       ca-certificates
 
@@ -28,14 +29,11 @@ designed to make HTTP requests easy for developers.
 %package -n python3-requests
 Summary: HTTP library, written in Python, for human beings
 BuildRequires: python3-devel
-Requires: python3-chardet
 %description -n python3-requests
 Most existing Python modules for sending HTTP requests are extremely verbose and
 cumbersome. Python’s built-in urllib2 module provides most of the HTTP
 capabilities you should need, but the API is thoroughly broken. This library is
 designed to make HTTP requests easy for developers.
-%else
-Requires: python-chardet
 %endif
 
 
@@ -43,20 +41,27 @@ Requires: python-chardet
 %setup -q -n requests-%{version}
 
 %build
-%{__python} setup.py build
 %if 0%{?_with_python3}
 %{__python3} setup.py build
 %endif
-
+%{__python} setup.py build
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%{__python} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %if 0%{?_with_python3}
-%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
+PYTHONDONTWRITEBYTECODE=1 %{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
+#%py_byte_compile %{__python} %{buildroot}%{python3_sitelib}/requests/packages/chardet2
+#%py_byte_compile %{__python} %{buildroot}%{python3_sitelib}/requests/packages/oauthlib
+#%py_byte_compile %{__python} %{buildroot}%{python3_sitelib}/requests/packages/urllib3
+#%py_byte_compile %{__python} %{buildroot}%{python3_sitelib}/requests/*.py
 %endif
 
- 
+PYTHONDONTWRITEBYTECODE=1 %{__python} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
+#%py_byte_compile %{__python} %{buildroot}%{python_sitelib}/requests/packages/chardet
+#%py_byte_compile %{__python} %{buildroot}%{python_sitelib}/requests/packages/oauthlib
+#%py_byte_compile %{__python} %{buildroot}%{python_sitelib}/requests/packages/urllib3
+#%py_byte_compile %{__python} %{buildroot}%{python_sitelib}/requests/*.py
+#
 %files
 %defattr(-,root,root,-)
 %doc NOTICE LICENSE README.rst HISTORY.rst
@@ -72,11 +77,8 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Sat Aug 04 2012 David Malcolm <dmalcolm@redhat.com> - 0.13.1-3
-- rebuild for https://fedoraproject.org/wiki/Features/Python_3.3
-
-* Sat Jul 21 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.13.1-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+* Wed Oct 22 2012 Arun S A G <sagarun@gmail.com>  0.14.1-1
+- Updated to latest upstream release
 
 * Sun Jun 10 2012 Arun S A G <sagarun@gmail.com> 0.13.1-1
 - Updated to latest upstream release 0.13.1
