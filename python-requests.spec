@@ -112,7 +112,7 @@ popd
 
 
 %changelog
-* Fri Feb  8 2013 Toshio Kuratomi <toshio@fedoraproject.org> - 0.14.1-3
+* Fri Feb  8 2013 Toshio Kuratomi <toshio@fedoraproject.org> - 0.14.1-4
 - Let brp_python_bytecompile run again, take care of the non-python{2,3} modules
   by removing them from the python{,3}-requests package that they did not belong
   in.
