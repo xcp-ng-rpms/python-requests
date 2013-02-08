@@ -1,0 +1,16 @@
+Index: requests-0.14.1/requests/certs.py
+===================================================================
+--- requests-0.14.1.orig/requests/certs.py
++++ requests-0.14.1/requests/certs.py
+@@ -21,7 +21,10 @@ def where():
+         return certifi.where()
+     else:
+         f = os.path.split(__file__)[0]
+-        return os.path.join(f, 'cacert.pem')
++        path = os.path.join(f, 'cacert.pem')
++        if os.path.exists(path):
++            return path
++    return None
+ 
+ if __name__ == '__main__':
+     print(where())

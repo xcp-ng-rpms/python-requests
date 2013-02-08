@@ -1,19 +1,23 @@
-%if 0%{?fedora} > 12 || 0%{?rhel} > 6
+%if 0%{?fedora}
 %global _with_python3 1
 %else
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print (get_python_lib())")}
 %endif
-# Turn off the brp-python-bytecompile script
-#%global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
 Name:           python-requests
 Version:        0.14.1
-Release:        1%{?dist}
+Release:        4%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ISC and MIT
 URL:            http://pypi.python.org/pypi/requests
 Source0:        http://pypi.python.org/packages/source/r/requests/requests-%{version}.tar.gz
-
+# Separate response cookies from request cookies discussed here:
+# https://github.com/fedora-infra/python-fedora/pull/6
+Patch0: python-requests-cookie-handling.patch
+# Use the system certificates in ca-certificates.  This patch causes util.py
+# to search for the system bundle (whereas now the return value of
+# certs.where() causes it to always use the bundled version.
+Patch1: python-requests-system-cert-bundle.patch
 BuildArch:      noarch
 BuildRequires:  python2-devel
 
@@ -40,28 +44,59 @@ designed to make HTTP requests easy for developers.
 %prep
 %setup -q -n requests-%{version}
 
+%patch0 -p1
+%patch1 -p1
+
+### TODO: Need to unbundle libraries in the packages directory.
+### https://bugzilla.redhat.com/show_bug.cgi?id=904623
+### Priority urllib3 since it's still bundled in requests-1.0.x
+### And it's a security issue:
+### https://bugzilla.redhat.com/show_bug.cgi?id=855322
+### https://bugzilla.redhat.com/show_bug.cgi?id=855323
+### Review request for urllib3:
+### https://bugzilla.redhat.com/show_bug.cgi?id=907688
+### chardet/2 is available as python-chardet and python3-chardet so
+### those may be easy to unbundle as well (will need patching, but looks 
+### like a single file, compat.py)
+### oauthlib isn't packaged yet (and not in requests-1.0.0)
+### but the code in requests will already prefer the system version to
+### the bundled version
+
+# Unbundle the certificate bundle from mozilla.
+rm -rf requests/cacert.pem
+
+%if 0%{?_with_python3}
+rm -rf %{py3dir}
+cp -a . %{py3dir}
+%endif # with_python3
+
+
 %build
 %if 0%{?_with_python3}
+pushd %{py3dir}
+rm -rf requests/packages/chardet
+# Note -- this means that requests.auth.OAuth1 won't work in py3.
+# But, as there isn't an oauthlib for py3, this didn't work anyway.
+# Could patch upstream's code to be more explicit about this but
+# requests-1.0.x dropped this functionality anyway
+rm -rf requests/packages/oauthlib
 %{__python3} setup.py build
+popd
 %endif
+
+rm -rf requests/packages/chardet2
 %{__python} setup.py build
 
 %install
 rm -rf $RPM_BUILD_ROOT
 %if 0%{?_with_python3}
-PYTHONDONTWRITEBYTECODE=1 %{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
-#%py_byte_compile %{__python} %{buildroot}%{python3_sitelib}/requests/packages/chardet2
-#%py_byte_compile %{__python} %{buildroot}%{python3_sitelib}/requests/packages/oauthlib
-#%py_byte_compile %{__python} %{buildroot}%{python3_sitelib}/requests/packages/urllib3
-#%py_byte_compile %{__python} %{buildroot}%{python3_sitelib}/requests/*.py
+pushd %{py3dir}
+%{__python3} setup.py install --skip-build --root $RPM_BUILD_ROOT
+popd
 %endif
 
-PYTHONDONTWRITEBYTECODE=1 %{__python} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
-#%py_byte_compile %{__python} %{buildroot}%{python_sitelib}/requests/packages/chardet
-#%py_byte_compile %{__python} %{buildroot}%{python_sitelib}/requests/packages/oauthlib
-#%py_byte_compile %{__python} %{buildroot}%{python_sitelib}/requests/packages/urllib3
-#%py_byte_compile %{__python} %{buildroot}%{python_sitelib}/requests/*.py
-#
+%{__python} setup.py install --skip-build --root $RPM_BUILD_ROOT
+
 %files
 %defattr(-,root,root,-)
 %doc NOTICE LICENSE README.rst HISTORY.rst
@@ -77,6 +112,15 @@ PYTHONDONTWRITEBYTECODE=1 %{__python} setup.py install -O1 --skip-build --root $
 
 
 %changelog
+* Fri Feb  8 2013 Toshio Kuratomi <toshio@fedoraproject.org> - 0.14.1-3
+- Let brp_python_bytecompile run again, take care of the non-python{2,3} modules
+  by removing them from the python{,3}-requests package that they did not belong
+  in.
+- Use the certificates in the ca-certificates package instead of the bundled one
+  + https://bugzilla.redhat.com/show_bug.cgi?id=904614
+- Fix a problem with cookie handling
+  + https://bugzilla.redhat.com/show_bug.cgi?id=906924
+
 * Wed Oct 22 2012 Arun S A G <sagarun@gmail.com>  0.14.1-1
 - Updated to latest upstream release
 
