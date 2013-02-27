@@ -3,21 +3,17 @@
 %else
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print (get_python_lib())")}
 %endif
+
 Name:           python-requests
-Version:        0.14.1
-Release:        4%{?dist}
+Version:        1.1.0
+Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
-License:        ISC and MIT
+License:        ASL 2.0
 URL:            http://pypi.python.org/pypi/requests
 Source0:        http://pypi.python.org/packages/source/r/requests/requests-%{version}.tar.gz
-# Separate response cookies from request cookies discussed here:
-# https://github.com/fedora-infra/python-fedora/pull/6
-Patch0: python-requests-cookie-handling.patch
-# Use the system certificates in ca-certificates.  This patch causes util.py
-# to search for the system bundle (whereas now the return value of
-# certs.where() causes it to always use the bundled version.
-Patch1: python-requests-system-cert-bundle.patch
+# Explicitly use the system certificates in ca-certificates.
+Patch0:         python-requests-system-cert-bundle.patch
 BuildArch:      noarch
 BuildRequires:  python2-devel
 
@@ -45,7 +41,6 @@ designed to make HTTP requests easy for developers.
 %setup -q -n requests-%{version}
 
 %patch0 -p1
-%patch1 -p1
 
 ### TODO: Need to unbundle libraries in the packages directory.
 ### https://bugzilla.redhat.com/show_bug.cgi?id=904623
@@ -97,6 +92,16 @@ popd
 
 %{__python} setup.py install --skip-build --root $RPM_BUILD_ROOT
 
+## The tests succeed if run locally, but fail in koji.
+## They require an active network connection to query httpbin.org
+#%%check
+#%%{__python} test_requests.py
+#%%if 0%%{?_with_python3}
+#pushd %%{py3dir}
+#%%{__python3} test_requests.py
+#popd
+#%%endif
+
 %files
 %defattr(-,root,root,-)
 %doc NOTICE LICENSE README.rst HISTORY.rst
@@ -112,6 +117,13 @@ popd
 
 
 %changelog
+* Tue Feb 26 2013 Ralph Bean <rbean@redhat.com> - 1.1.0-1
+- Latest upstream.
+- Relicense to ASL 2.0 with upstream.
+- Removed cookie handling patch (fixed in upstream tarball).
+- Updated cert unbundling patch to match upstream.
+- Added check section, but left it commented out for koji.
+
 * Fri Feb  8 2013 Toshio Kuratomi <toshio@fedoraproject.org> - 0.14.1-4
 - Let brp_python_bytecompile run again, take care of the non-python{2,3} modules
   by removing them from the python{,3}-requests package that they did not belong
