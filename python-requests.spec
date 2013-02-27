@@ -53,9 +53,6 @@ designed to make HTTP requests easy for developers.
 ### chardet/2 is available as python-chardet and python3-chardet so
 ### those may be easy to unbundle as well (will need patching, but looks 
 ### like a single file, compat.py)
-### oauthlib isn't packaged yet (and not in requests-1.0.0)
-### but the code in requests will already prefer the system version to
-### the bundled version
 
 # Unbundle the certificate bundle from mozilla.
 rm -rf requests/cacert.pem
