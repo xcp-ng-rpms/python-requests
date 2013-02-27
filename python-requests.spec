@@ -6,18 +6,25 @@
 
 Name:           python-requests
 Version:        1.1.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
 URL:            http://pypi.python.org/pypi/requests
 Source0:        http://pypi.python.org/packages/source/r/requests/requests-%{version}.tar.gz
 # Explicitly use the system certificates in ca-certificates.
+# https://bugzilla.redhat.com/show_bug.cgi?id=904614
 Patch0:         python-requests-system-cert-bundle.patch
+# Unbundle python-charade (a fork of python-chardet).
+# https://bugzilla.redhat.com/show_bug.cgi?id=904623
+Patch1:         python-requests-system-chardet-not-charade.patch
+
 BuildArch:      noarch
 BuildRequires:  python2-devel
+BuildRequires:  python-chardet
 
 Requires:       ca-certificates
+Requires:       python-chardet
 
 %description
 Most existing Python modules for sending HTTP requests are extremely verbose and 
@@ -28,7 +35,10 @@ designed to make HTTP requests easy for developers.
 %if 0%{?_with_python3}
 %package -n python3-requests
 Summary: HTTP library, written in Python, for human beings
-BuildRequires: python3-devel
+BuildRequires:  python3-devel
+BuildRequires:  python3-chardet
+Requires:       python3-chardet
+
 %description -n python3-requests
 Most existing Python modules for sending HTTP requests are extremely verbose and
 cumbersome. Python’s built-in urllib2 module provides most of the HTTP
@@ -41,6 +51,7 @@ designed to make HTTP requests easy for developers.
 %setup -q -n requests-%{version}
 
 %patch0 -p1
+%patch1 -p1
 
 ### TODO: Need to unbundle libraries in the packages directory.
 ### https://bugzilla.redhat.com/show_bug.cgi?id=904623
@@ -50,9 +61,6 @@ designed to make HTTP requests easy for developers.
 ### https://bugzilla.redhat.com/show_bug.cgi?id=855323
 ### Review request for urllib3:
 ### https://bugzilla.redhat.com/show_bug.cgi?id=907688
-### chardet/2 is available as python-chardet and python3-chardet so
-### those may be easy to unbundle as well (will need patching, but looks 
-### like a single file, compat.py)
 
 # Unbundle the certificate bundle from mozilla.
 rm -rf requests/cacert.pem
@@ -62,22 +70,21 @@ rm -rf %{py3dir}
 cp -a . %{py3dir}
 %endif # with_python3
 
-
 %build
 %if 0%{?_with_python3}
 pushd %{py3dir}
-rm -rf requests/packages/chardet
-# Note -- this means that requests.auth.OAuth1 won't work in py3.
-# But, as there isn't an oauthlib for py3, this didn't work anyway.
-# Could patch upstream's code to be more explicit about this but
-# requests-1.0.x dropped this functionality anyway
-rm -rf requests/packages/oauthlib
 %{__python3} setup.py build
+
+# Unbundle chardet.  Patch1 switches usage to system chardet.
+rm -rf build/lib/requests/packages/charade
+
 popd
 %endif
 
-rm -rf requests/packages/chardet2
 %{__python} setup.py build
+
+# Unbundle chardet.  Patch1 switches usage to system chardet.
+rm -rf build/lib/requests/packages/charade
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -114,6 +121,12 @@ popd
 
 
 %changelog
+* Wed Feb 27 2013 Ralph Bean <rbean@redhat.com> - 1.1.0-2
+- Unbundled python-charade/chardet.  Using system python-chardet now.
+- Removed deprecated comments and actions against oauthlib unbundling.
+  Those are no longer necessary in 1.1.0.
+- Added links to bz tickets over Patch declarations.
+
 * Tue Feb 26 2013 Ralph Bean <rbean@redhat.com> - 1.1.0-1
 - Latest upstream.
 - Relicense to ASL 2.0 with upstream.
