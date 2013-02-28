@@ -6,7 +6,7 @@
 
 Name:           python-requests
 Version:        1.1.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -18,13 +18,23 @@ Patch0:         python-requests-system-cert-bundle.patch
 # Unbundle python-charade (a fork of python-chardet).
 # https://bugzilla.redhat.com/show_bug.cgi?id=904623
 Patch1:         python-requests-system-chardet-not-charade.patch
+# Unbundle python-charade (a fork of python-urllib3).
+# https://bugzilla.redhat.com/show_bug.cgi?id=904623
+Patch2:         python-requests-system-urllib3.patch
 
 BuildArch:      noarch
 BuildRequires:  python2-devel
 BuildRequires:  python-chardet
+BuildRequires:  python-urllib3
 
 Requires:       ca-certificates
 Requires:       python-chardet
+Requires:       python-urllib3
+
+%if 0%{?rhel}
+BuildRequires:  python-ordereddict
+Requires:       python-ordereddict
+%endif
 
 %description
 Most existing Python modules for sending HTTP requests are extremely verbose and 
@@ -37,7 +47,9 @@ designed to make HTTP requests easy for developers.
 Summary: HTTP library, written in Python, for human beings
 BuildRequires:  python3-devel
 BuildRequires:  python3-chardet
+BuildRequires:  python3-urllib3
 Requires:       python3-chardet
+Requires:       python3-urllib3
 
 %description -n python3-requests
 Most existing Python modules for sending HTTP requests are extremely verbose and
@@ -46,21 +58,12 @@ capabilities you should need, but the API is thoroughly broken. This library is
 designed to make HTTP requests easy for developers.
 %endif
 
-
 %prep
 %setup -q -n requests-%{version}
 
 %patch0 -p1
 %patch1 -p1
-
-### TODO: Need to unbundle libraries in the packages directory.
-### https://bugzilla.redhat.com/show_bug.cgi?id=904623
-### Priority urllib3 since it's still bundled in requests-1.0.x
-### And it's a security issue:
-### https://bugzilla.redhat.com/show_bug.cgi?id=855322
-### https://bugzilla.redhat.com/show_bug.cgi?id=855323
-### Review request for urllib3:
-### https://bugzilla.redhat.com/show_bug.cgi?id=907688
+%patch2 -p1
 
 # Unbundle the certificate bundle from mozilla.
 rm -rf requests/cacert.pem
@@ -78,6 +81,9 @@ pushd %{py3dir}
 # Unbundle chardet.  Patch1 switches usage to system chardet.
 rm -rf build/lib/requests/packages/charade
 
+# Unbundle urllib3.  Patch1 switches usage to system urllib3.
+rm -rf build/lib/requests/packages
+
 popd
 %endif
 
@@ -85,6 +91,9 @@ popd
 
 # Unbundle chardet.  Patch1 switches usage to system chardet.
 rm -rf build/lib/requests/packages/charade
+
+# Unbundle urllib3.  Patch1 switches usage to system urllib3.
+rm -rf build/lib/requests/packages
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -119,8 +128,11 @@ popd
 %{python3_sitelib}/requests/
 %endif
 
-
 %changelog
+* Thu Feb 28 2013 Ralph Bean <rbean@redhat.com> - 1.1.0-3
+- Unbundled python-urllib3.  Using system python-urllib3 now.
+- Conditionally include python-ordereddict for el6.
+
 * Wed Feb 27 2013 Ralph Bean <rbean@redhat.com> - 1.1.0-2
 - Unbundled python-charade/chardet.  Using system python-chardet now.
 - Removed deprecated comments and actions against oauthlib unbundling.
