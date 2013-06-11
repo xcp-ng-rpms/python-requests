@@ -6,7 +6,7 @@
 
 Name:           python-requests
 Version:        1.1.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -31,7 +31,7 @@ Requires:       ca-certificates
 Requires:       python-chardet
 Requires:       python-urllib3
 
-%if 0%{?rhel}
+%if 0%{?rhel} && 0%{?rhel} <= 6
 BuildRequires:  python-ordereddict
 Requires:       python-ordereddict
 %endif
@@ -129,6 +129,9 @@ popd
 %endif
 
 %changelog
+* Tue Jun 11 2013 Ralph Bean <rbean@redhat.com> - 1.1.0-4
+- Correct a rhel conditional on python-ordereddict
+
 * Thu Feb 28 2013 Ralph Bean <rbean@redhat.com> - 1.1.0-3
 - Unbundled python-urllib3.  Using system python-urllib3 now.
 - Conditionally include python-ordereddict for el6.
