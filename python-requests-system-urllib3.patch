@@ -1,30 +1,48 @@
-From 5d23c608e72025f72e1f3223cb6c7e3979e93c7f Mon Sep 17 00:00:00 2001
+From 3ca53c8ba4557fc04c98c2b3b6aced09ddac6f7b Mon Sep 17 00:00:00 2001
 From: Ralph Bean <rbean@redhat.com>
-Date: Thu, 28 Feb 2013 10:57:20 -0500
-Subject: [PATCH] system-urllib3
+Date: Mon, 1 Jul 2013 15:00:59 -0400
+Subject: [PATCH 3/3] system urllib3
 
 ---
+ requests/__init__.py |  7 -------
  requests/adapters.py | 12 ++++++------
- requests/compat.py   |  6 +++++-
+ requests/compat.py   |  5 ++++-
  requests/models.py   |  4 ++--
- 3 files changed, 13 insertions(+), 9 deletions(-)
+ 4 files changed, 12 insertions(+), 16 deletions(-)
 
+diff --git a/requests/__init__.py b/requests/__init__.py
+index 1af8d8e..8bc9843 100644
+--- a/requests/__init__.py
++++ b/requests/__init__.py
+@@ -48,13 +48,6 @@ __author__ = 'Kenneth Reitz'
+ __license__ = 'Apache 2.0'
+ __copyright__ = 'Copyright 2013 Kenneth Reitz'
+ 
+-# Attempt to enable urllib3's SNI support, if possible
+-try:
+-    from requests.packages.urllib3.contrib import pyopenssl
+-    pyopenssl.inject_into_urllib3()
+-except ImportError:
+-    pass
+-
+ from . import utils
+ from .models import Request, Response, PreparedRequest
+ from .api import request, get, head, post, patch, put, delete, options
 diff --git a/requests/adapters.py b/requests/adapters.py
-index 5f9d9c7..1f61bd6 100644
+index 98b7317..9ec3b1d 100644
 --- a/requests/adapters.py
 +++ b/requests/adapters.py
-@@ -11,17 +11,17 @@ and maintain connections.
+@@ -11,16 +11,16 @@ and maintain connections.
  import socket
  
  from .models import Response
--from .packages.urllib3.poolmanager import PoolManager, proxy_from_url
+-from .packages.urllib3.poolmanager import PoolManager, ProxyManager
 -from .packages.urllib3.response import HTTPResponse
-+from urllib3.poolmanager import PoolManager, proxy_from_url
++from urllib3.poolmanager import PoolManager, ProxyManager
 +from urllib3.response import HTTPResponse
- from .hooks import dispatch_hook
- from .compat import urlparse, basestring, urldefrag
+ from .compat import urlparse, basestring, urldefrag, unquote
  from .utils import (DEFAULT_CA_BUNDLE_PATH, get_encoding_from_headers,
-                     prepend_scheme_if_needed)
+                     prepend_scheme_if_needed, get_auth_from_url)
  from .structures import CaseInsensitiveDict
 -from .packages.urllib3.exceptions import MaxRetryError
 -from .packages.urllib3.exceptions import TimeoutError
@@ -36,17 +54,16 @@ index 5f9d9c7..1f61bd6 100644
 +from urllib3.exceptions import HTTPError as _HTTPError
  from .cookies import extract_cookies_to_jar
  from .exceptions import ConnectionError, Timeout, SSLError
- 
+ from .auth import _basic_auth_str
 diff --git a/requests/compat.py b/requests/compat.py
-index 39421ed..d9ab218 100644
+index 93f6bb6..8b4a3bd 100644
 --- a/requests/compat.py
 +++ b/requests/compat.py
-@@ -89,7 +89,11 @@ if is_py2:
+@@ -89,7 +89,10 @@ if is_py2:
      import cookielib
      from Cookie import Morsel
      from StringIO import StringIO
 -    from .packages.urllib3.packages.ordered_dict import OrderedDict
-+
 +    try:
 +        from collections import OrderedDict
 +    except ImportError:
@@ -55,27 +72,20 @@ index 39421ed..d9ab218 100644
      builtin_str = str
      bytes = str
 diff --git a/requests/models.py b/requests/models.py
-index 5202e6f..218b4f2 100644
+index 6cf2aaa..8a0ae9a 100644
 --- a/requests/models.py
 +++ b/requests/models.py
-@@ -17,7 +17,7 @@ from .status_codes import codes
+@@ -17,8 +17,8 @@ from .structures import CaseInsensitiveDict
  
  from .auth import HTTPBasicAuth
  from .cookies import cookiejar_from_dict, get_cookie_header
 -from .packages.urllib3.filepost import encode_multipart_formdata
+-from .packages.urllib3.util import parse_url
 +from urllib3.filepost import encode_multipart_formdata
++from urllib3.util import parse_url
  from .exceptions import HTTPError, RequestException, MissingSchema, InvalidURL
  from .utils import (
-     stream_untransfer, guess_filename, requote_uri,
-@@ -121,7 +121,7 @@ class RequestEncodingMixin(object):
-                 fp = StringIO(fp)
-             if isinstance(fp, bytes):
-                 fp = BytesIO(fp)
--            
-+
-             if ft:
-                 new_v = (fn, fp.read(), ft)
-             else:
+     guess_filename, get_auth_from_url, requote_uri,
 -- 
-1.8.1.2
+1.8.1.4
 

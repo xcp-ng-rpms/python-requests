@@ -5,8 +5,8 @@
 %endif
 
 Name:           python-requests
-Version:        1.1.0
-Release:        4%{?dist}
+Version:        1.2.3
+Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -129,6 +129,10 @@ popd
 %endif
 
 %changelog
+* Mon Jul 01 2013 Ralph Bean <rbean@redhat.com> - 1.2.3-1
+- Latest upstream.
+- Fixed bogus date in changelog.
+
 * Tue Jun 11 2013 Ralph Bean <rbean@redhat.com> - 1.1.0-4
 - Correct a rhel conditional on python-ordereddict
 
@@ -158,7 +162,7 @@ popd
 - Fix a problem with cookie handling
   + https://bugzilla.redhat.com/show_bug.cgi?id=906924
 
-* Wed Oct 22 2012 Arun S A G <sagarun@gmail.com>  0.14.1-1
+* Mon Oct 22 2012 Arun S A G <sagarun@gmail.com>  0.14.1-1
 - Updated to latest upstream release
 
 * Sun Jun 10 2012 Arun S A G <sagarun@gmail.com> 0.13.1-1
