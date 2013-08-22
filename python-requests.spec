@@ -6,7 +6,7 @@
 
 Name:           python-requests
 Version:        1.2.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -129,6 +129,9 @@ popd
 %endif
 
 %changelog
+* Thu Aug 22 2013 Ralph Bean <rbean@redhat.com> - 1.2.3-3
+- Release bump for a coupled update with python-urllib3.
+
 * Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.2.3-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
