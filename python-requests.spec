@@ -6,7 +6,7 @@
 
 Name:           python-requests
 Version:        1.2.3
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -29,7 +29,7 @@ BuildRequires:  python-urllib3
 
 Requires:       ca-certificates
 Requires:       python-chardet
-Requires:       python-urllib3
+Requires:       python-urllib3>=1.7
 
 %if 0%{?rhel} && 0%{?rhel} <= 6
 BuildRequires:  python-ordereddict
@@ -49,7 +49,7 @@ BuildRequires:  python3-devel
 BuildRequires:  python3-chardet
 BuildRequires:  python3-urllib3
 Requires:       python3-chardet
-Requires:       python3-urllib3
+Requires:       python3-urllib3>=1.7
 
 %description -n python3-requests
 Most existing Python modules for sending HTTP requests are extremely verbose and
@@ -129,6 +129,9 @@ popd
 %endif
 
 %changelog
+* Mon Aug 26 2013 Ralph Bean <rbean@redhat.com> - 1.2.3-4
+- Explicitly versioned the requirements on python-urllib3.
+
 * Thu Aug 22 2013 Ralph Bean <rbean@redhat.com> - 1.2.3-3
 - Release bump for a coupled update with python-urllib3.
 
