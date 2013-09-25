@@ -5,8 +5,8 @@
 %endif
 
 Name:           python-requests
-Version:        1.2.3
-Release:        5%{?dist}
+Version:        2.0.0
+Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -25,11 +25,11 @@ Patch2:         python-requests-system-urllib3.patch
 BuildArch:      noarch
 BuildRequires:  python2-devel
 BuildRequires:  python-chardet
-BuildRequires:  python-urllib3
+BuildRequires:  python-urllib3 >= 1.7.1
 
 Requires:       ca-certificates
 Requires:       python-chardet
-Requires:       python-urllib3 >= 1.7
+Requires:       python-urllib3 >= 1.7.1
 
 %if 0%{?rhel} && 0%{?rhel} <= 6
 BuildRequires:  python-ordereddict
@@ -47,9 +47,9 @@ designed to make HTTP requests easy for developers.
 Summary: HTTP library, written in Python, for human beings
 BuildRequires:  python3-devel
 BuildRequires:  python3-chardet
-BuildRequires:  python3-urllib3
+BuildRequires:  python3-urllib3 >= 1.7.1
 Requires:       python3-chardet
-Requires:       python3-urllib3 >= 1.7
+Requires:       python3-urllib3 >= 1.7.1
 
 %description -n python3-requests
 Most existing Python modules for sending HTTP requests are extremely verbose and
@@ -124,11 +124,17 @@ popd
 
 %if 0%{?_with_python3}
 %files -n python3-requests
+%doc NOTICE LICENSE README.rst HISTORY.rst
 %{python3_sitelib}/*.egg-info
 %{python3_sitelib}/requests/
 %endif
 
 %changelog
+* Wed Sep 25 2013 Ralph Bean <rbean@redhat.com> - 2.0.0-1
+- Latest upstream.
+- Add doc macro to the python3 files section.
+- Require python-urllib3 greater than or at 1.7.1.
+
 * Mon Aug 26 2013 Rex Dieter <rdieter@fedoraproject.org> 1.2.3-5
 - fix versioned dep on python-urllib3
 
