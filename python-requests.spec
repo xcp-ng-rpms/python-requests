@@ -6,7 +6,7 @@
 
 Name:           python-requests
 Version:        2.0.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -130,6 +130,9 @@ popd
 %endif
 
 %changelog
+* Wed May 14 2014 Bohuslav Kabrda <bkabrda@redhat.com> - 2.0.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Changes/Python_3.4
+
 * Wed Sep 25 2013 Ralph Bean <rbean@redhat.com> - 2.0.0-1
 - Latest upstream.
 - Add doc macro to the python3 files section.
