@@ -5,8 +5,8 @@
 %endif
 
 Name:           python-requests
-Version:        2.0.0
-Release:        2%{?dist}
+Version:        2.3.0
+Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -25,11 +25,11 @@ Patch2:         python-requests-system-urllib3.patch
 BuildArch:      noarch
 BuildRequires:  python2-devel
 BuildRequires:  python-chardet
-BuildRequires:  python-urllib3 >= 1.7.1
+BuildRequires:  python-urllib3 >= 1.8.2
 
 Requires:       ca-certificates
 Requires:       python-chardet
-Requires:       python-urllib3 >= 1.7.1
+Requires:       python-urllib3 >= 1.8.2
 
 %if 0%{?rhel} && 0%{?rhel} <= 6
 BuildRequires:  python-ordereddict
@@ -47,9 +47,9 @@ designed to make HTTP requests easy for developers.
 Summary: HTTP library, written in Python, for human beings
 BuildRequires:  python3-devel
 BuildRequires:  python3-chardet
-BuildRequires:  python3-urllib3 >= 1.7.1
+BuildRequires:  python3-urllib3 >= 1.8.2
 Requires:       python3-chardet
-Requires:       python3-urllib3 >= 1.7.1
+Requires:       python3-urllib3 >= 1.8.2
 
 %description -n python3-requests
 Most existing Python modules for sending HTTP requests are extremely verbose and
@@ -79,7 +79,7 @@ pushd %{py3dir}
 %{__python3} setup.py build
 
 # Unbundle chardet.  Patch1 switches usage to system chardet.
-rm -rf build/lib/requests/packages/charade
+rm -rf build/lib/requests/packages/chardet
 
 # Unbundle urllib3.  Patch1 switches usage to system urllib3.
 rm -rf build/lib/requests/packages
@@ -130,6 +130,9 @@ popd
 %endif
 
 %changelog
+* Thu May 29 2014 Arun S A G <sagarun@gmail.com> - 2.3.0-1
+- Latest upstream
+
 * Wed May 14 2014 Bohuslav Kabrda <bkabrda@redhat.com> - 2.0.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Changes/Python_3.4
 

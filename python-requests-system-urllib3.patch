@@ -1,38 +1,7 @@
-From c3fcc7597106553ad7b495a22535645617e20e18 Mon Sep 17 00:00:00 2001
-From: Ralph Bean <rbean@redhat.com>
-Date: Wed, 25 Sep 2013 09:05:31 -0400
-Subject: [PATCH 3/3] system urllib3
-
----
- requests/__init__.py |  7 -------
- requests/adapters.py | 14 +++++++-------
- requests/compat.py   |  5 ++++-
- requests/models.py   |  4 ++--
- 4 files changed, 13 insertions(+), 17 deletions(-)
-
-diff --git a/requests/__init__.py b/requests/__init__.py
-index 837f0df..a28977d 100644
---- a/requests/__init__.py
-+++ b/requests/__init__.py
-@@ -48,13 +48,6 @@ __author__ = 'Kenneth Reitz'
- __license__ = 'Apache 2.0'
- __copyright__ = 'Copyright 2013 Kenneth Reitz'
- 
--# Attempt to enable urllib3's SNI support, if possible
--try:
--    from .packages.urllib3.contrib import pyopenssl
--    pyopenssl.inject_into_urllib3()
--except ImportError:
--    pass
--
- from . import utils
- from .models import Request, Response, PreparedRequest
- from .api import request, get, head, post, patch, put, delete, options
-diff --git a/requests/adapters.py b/requests/adapters.py
-index d557b74..577bced 100644
---- a/requests/adapters.py
-+++ b/requests/adapters.py
-@@ -11,17 +11,17 @@ and maintain connections.
+diff -up ./requests/adapters.py.orig ./requests/adapters.py
+--- ./requests/adapters.py.orig	2014-05-30 00:27:36.151074219 -0700
++++ ./requests/adapters.py	2014-05-30 00:31:26.712662414 -0700
+@@ -11,18 +11,18 @@ and maintain connections.
  import socket
  
  from .models import Response
@@ -44,23 +13,24 @@ index d557b74..577bced 100644
 +from urllib3.util import Timeout as TimeoutSauce
  from .compat import urlparse, basestring, urldefrag, unquote
  from .utils import (DEFAULT_CA_BUNDLE_PATH, get_encoding_from_headers,
-                     except_on_missing_scheme, get_auth_from_url)
+                     prepend_scheme_if_needed, get_auth_from_url)
  from .structures import CaseInsensitiveDict
 -from .packages.urllib3.exceptions import MaxRetryError
 -from .packages.urllib3.exceptions import TimeoutError
 -from .packages.urllib3.exceptions import SSLError as _SSLError
 -from .packages.urllib3.exceptions import HTTPError as _HTTPError
+-from .packages.urllib3.exceptions import ProxyError as _ProxyError
 +from urllib3.exceptions import MaxRetryError
 +from urllib3.exceptions import TimeoutError
 +from urllib3.exceptions import SSLError as _SSLError
 +from urllib3.exceptions import HTTPError as _HTTPError
++from urllib3.exceptions import ProxyError as _ProxyError
  from .cookies import extract_cookies_to_jar
- from .exceptions import ConnectionError, Timeout, SSLError
+ from .exceptions import ConnectionError, Timeout, SSLError, ProxyError
  from .auth import _basic_auth_str
-diff --git a/requests/compat.py b/requests/compat.py
-index 62bfef9..b394b17 100644
---- a/requests/compat.py
-+++ b/requests/compat.py
+diff -up ./requests/compat.py.orig ./requests/compat.py
+--- ./requests/compat.py.orig	2014-05-30 00:46:53.888049149 -0700
++++ ./requests/compat.py	2014-05-30 00:54:17.647105931 -0700
 @@ -89,7 +89,10 @@ if is_py2:
      import cookielib
      from Cookie import Morsel
@@ -73,21 +43,50 @@ index 62bfef9..b394b17 100644
      from httplib import IncompleteRead
  
      builtin_str = str
-diff --git a/requests/models.py b/requests/models.py
-index 8fd9735..7df85c1 100644
---- a/requests/models.py
-+++ b/requests/models.py
-@@ -17,8 +17,8 @@ from .structures import CaseInsensitiveDict
+diff -up ./requests/exceptions.py.orig ./requests/exceptions.py
+--- ./requests/exceptions.py.orig	2014-05-30 00:59:00.825056566 -0700
++++ ./requests/exceptions.py	2014-05-30 00:59:13.416143297 -0700
+@@ -7,7 +7,7 @@ requests.exceptions
+ This module contains the set of Requests' exceptions.
+ 
+ """
+-from .packages.urllib3.exceptions import HTTPError as BaseHTTPError
++from urllib3.exceptions import HTTPError as BaseHTTPError
+ 
+ 
+ class RequestException(IOError):
+diff -up ./requests/__init__.py.orig ./requests/__init__.py
+--- ./requests/__init__.py.orig	2014-05-30 00:27:56.025211120 -0700
++++ ./requests/__init__.py	2014-05-30 00:54:37.009239302 -0700
+@@ -48,13 +48,6 @@ __author__ = 'Kenneth Reitz'
+ __license__ = 'Apache 2.0'
+ __copyright__ = 'Copyright 2014 Kenneth Reitz'
+ 
+-# Attempt to enable urllib3's SNI support, if possible
+-try:
+-    from .packages.urllib3.contrib import pyopenssl
+-    pyopenssl.inject_into_urllib3()
+-except ImportError:
+-    pass
+-
+ from . import utils
+ from .models import Request, Response, PreparedRequest
+ from .api import request, get, head, post, patch, put, delete, options
+diff -up ./requests/models.py.orig ./requests/models.py
+--- ./requests/models.py.orig	2014-05-30 00:27:18.926955573 -0700
++++ ./requests/models.py	2014-05-30 00:31:12.714565990 -0700
+@@ -16,10 +16,10 @@ from .structures import CaseInsensitiveD
  
  from .auth import HTTPBasicAuth
  from .cookies import cookiejar_from_dict, get_cookie_header
+-from .packages.urllib3.fields import RequestField
 -from .packages.urllib3.filepost import encode_multipart_formdata
 -from .packages.urllib3.util import parse_url
+-from .packages.urllib3.exceptions import DecodeError
++from urllib3.fields import RequestField
 +from urllib3.filepost import encode_multipart_formdata
 +from urllib3.util import parse_url
++from urllib3.exceptions import DecodeError
  from .exceptions import (
      HTTPError, RequestException, MissingSchema, InvalidURL,
-     ChunkedEncodingError)
--- 
-1.8.3.1
-
+     ChunkedEncodingError, ContentDecodingError)

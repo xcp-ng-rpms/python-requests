@@ -1,25 +1,12 @@
-From ff921c66c3d0d38b2aa63eba529c9f0cb68c549a Mon Sep 17 00:00:00 2001
-From: Ralph Bean <rbean@redhat.com>
-Date: Wed, 27 Feb 2013 10:03:41 -0500
-Subject: [PATCH 2/3] Use system chardet, not charade.
-
----
- requests/compat.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/requests/compat.py b/requests/compat.py
-index 0d61a57..62bfef9 100644
---- a/requests/compat.py
-+++ b/requests/compat.py
+diff -up ./requests/compat.py.orig ./requests/compat.py
+--- ./requests/compat.py.orig	2014-05-30 00:23:21.910322912 -0700
++++ ./requests/compat.py	2014-05-30 00:24:06.697631425 -0700
 @@ -4,7 +4,7 @@
  pythoncompat
  """
  
--from .packages import charade as chardet
+-from .packages import chardet
 +import chardet
  
  import sys
  
--- 
-1.8.3.1
-
