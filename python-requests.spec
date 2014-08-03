@@ -6,7 +6,7 @@
 
 Name:           python-requests
 Version:        2.3.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -117,19 +117,26 @@ popd
 
 %files
 %defattr(-,root,root,-)
-%doc NOTICE LICENSE README.rst HISTORY.rst
+%{!?_licensedir:%global license %%doc}
+%license LICENSE
+%doc NOTICE README.rst HISTORY.rst
 %{python_sitelib}/*.egg-info
 %dir %{python_sitelib}/requests
 %{python_sitelib}/requests/*
 
 %if 0%{?_with_python3}
 %files -n python3-requests
-%doc NOTICE LICENSE README.rst HISTORY.rst
+%{!?_licensedir:%global license %%doc}
+%license LICENSE
+%doc NOTICE README.rst HISTORY.rst
 %{python3_sitelib}/*.egg-info
 %{python3_sitelib}/requests/
 %endif
 
 %changelog
+* Sun Aug  3 2014 Tom Callaway <spot@fedoraproject.org> - 2.3.0-3
+- fix license handling
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.3.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
