@@ -6,7 +6,7 @@
 
 Name:           python-requests
 Version:        2.3.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -15,12 +15,9 @@ Source0:        http://pypi.python.org/packages/source/r/requests/requests-%{ver
 # Explicitly use the system certificates in ca-certificates.
 # https://bugzilla.redhat.com/show_bug.cgi?id=904614
 Patch0:         python-requests-system-cert-bundle.patch
-# Unbundle python-charade (a fork of python-chardet).
-# https://bugzilla.redhat.com/show_bug.cgi?id=904623
-Patch1:         python-requests-system-chardet-not-charade.patch
-# Unbundle python-charade (a fork of python-urllib3).
-# https://bugzilla.redhat.com/show_bug.cgi?id=904623
-Patch2:         python-requests-system-urllib3.patch
+
+# Remove an unnecessary reference to a bundled compat lib in urllib3
+Patch1:         python-requests-remove-nested-bundling-dep.patch
 
 BuildArch:      noarch
 BuildRequires:  python2-devel
@@ -63,7 +60,6 @@ designed to make HTTP requests easy for developers.
 
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
 
 # Unbundle the certificate bundle from mozilla.
 rm -rf requests/cacert.pem
@@ -78,32 +74,32 @@ cp -a . %{py3dir}
 pushd %{py3dir}
 %{__python3} setup.py build
 
-# Unbundle chardet.  Patch1 switches usage to system chardet.
+# Unbundle chardet and urllib3.  We replace these with symlinks to system libs.
 rm -rf build/lib/requests/packages/chardet
-
-# Unbundle urllib3.  Patch1 switches usage to system urllib3.
-rm -rf build/lib/requests/packages
+rm -rf build/lib/requests/packages/urllib3
 
 popd
 %endif
 
 %{__python} setup.py build
 
-# Unbundle chardet.  Patch1 switches usage to system chardet.
-rm -rf build/lib/requests/packages/charade
-
-# Unbundle urllib3.  Patch1 switches usage to system urllib3.
-rm -rf build/lib/requests/packages
+# Unbundle chardet and urllib3.  We replace these with symlinks to system libs.
+rm -rf build/lib/requests/packages/chardet
+rm -rf build/lib/requests/packages/urllib3
 
 %install
 rm -rf $RPM_BUILD_ROOT
 %if 0%{?_with_python3}
 pushd %{py3dir}
 %{__python3} setup.py install --skip-build --root $RPM_BUILD_ROOT
+ln -s ../../chardet %{buildroot}/%{python3_sitelib}/requests/packages/chardet
+ln -s ../../urllib3 %{buildroot}/%{python3_sitelib}/requests/packages/urllib3
 popd
 %endif
 
 %{__python} setup.py install --skip-build --root $RPM_BUILD_ROOT
+ln -s ../../chardet %{buildroot}/%{python_sitelib}/requests/packages/chardet
+ln -s ../../urllib3 %{buildroot}/%{python_sitelib}/requests/packages/urllib3
 
 ## The tests succeed if run locally, but fail in koji.
 ## They require an active network connection to query httpbin.org
@@ -134,6 +130,9 @@ popd
 %endif
 
 %changelog
+* Wed Nov 05 2014 Ralph Bean <rbean@redhat.com> - 2.3.0-4
+- Re-do unbundling by symlinking system libs into the requests/packages/ dir.
+
 * Sun Aug  3 2014 Tom Callaway <spot@fedoraproject.org> - 2.3.0-3
 - fix license handling
 
