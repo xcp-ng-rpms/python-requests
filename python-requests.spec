@@ -5,8 +5,8 @@
 %endif
 
 Name:           python-requests
-Version:        2.3.0
-Release:        4%{?dist}
+Version:        2.4.3
+Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -130,6 +130,9 @@ ln -s ../../urllib3 %{buildroot}/%{python_sitelib}/requests/packages/urllib3
 %endif
 
 %changelog
+* Wed Nov 05 2014 Ralph Bean <rbean@redhat.com> - 2.4.3-1
+- Latest upstream, 2.4.3 for #1136283
+
 * Wed Nov 05 2014 Ralph Bean <rbean@redhat.com> - 2.3.0-4
 - Re-do unbundling by symlinking system libs into the requests/packages/ dir.
 
