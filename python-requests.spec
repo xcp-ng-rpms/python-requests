@@ -5,7 +5,7 @@
 %endif
 
 Name:           python-requests
-Version:        2.4.3
+Version:        2.5.0
 Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
@@ -130,6 +130,9 @@ ln -s ../../urllib3 %{buildroot}/%{python_sitelib}/requests/packages/urllib3
 %endif
 
 %changelog
+* Thu Dec 11 2014 Ralph Bean <rbean@redhat.com> - 2.5.0-1
+- Latest upstream, 2.5.0 for #1171068
+
 * Wed Nov 05 2014 Ralph Bean <rbean@redhat.com> - 2.4.3-1
 - Latest upstream, 2.4.3 for #1136283
 
