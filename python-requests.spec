@@ -6,7 +6,7 @@
 
 Name:           python-requests
 Version:        2.5.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -103,13 +103,24 @@ ln -s ../../urllib3 %{buildroot}/%{python_sitelib}/requests/packages/urllib3
 
 ## The tests succeed if run locally, but fail in koji.
 ## They require an active network connection to query httpbin.org
-#%%check
+%check
+
 #%%{__python} test_requests.py
 #%%if 0%%{?_with_python3}
 #pushd %%{py3dir}
 #%%{__python3} test_requests.py
 #popd
 #%%endif
+
+# At very, very least, we'll try to start python and import requests
+PYTHONPATH=. %{__python} -c "import requests"
+
+%if 0%{?_with_python3}
+pushd %{py3dir}
+PYTHONPATH=. %{__python3} -c "import requests"
+popd
+%endif
+
 
 %files
 %defattr(-,root,root,-)
@@ -130,6 +141,9 @@ ln -s ../../urllib3 %{buildroot}/%{python_sitelib}/requests/packages/urllib3
 %endif
 
 %changelog
+* Thu Dec 11 2014 Ralph Bean <rbean@redhat.com> - 2.5.0-2
+- Do the most basic of tests in the check section.
+
 * Thu Dec 11 2014 Ralph Bean <rbean@redhat.com> - 2.5.0-1
 - Latest upstream, 2.5.0 for #1171068
 
