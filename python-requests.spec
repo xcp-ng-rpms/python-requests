@@ -22,11 +22,11 @@ Patch1:         python-requests-remove-nested-bundling-dep.patch
 BuildArch:      noarch
 BuildRequires:  python2-devel
 BuildRequires:  python-chardet
-BuildRequires:  python-urllib3>=1.10.0
+BuildRequires:  python-urllib3 >= 1.10
 
 Requires:       ca-certificates
 Requires:       python-chardet
-Requires:       python-urllib3>=1.10.0
+Requires:       python-urllib3 >= 1.10
 
 %if 0%{?rhel} && 0%{?rhel} <= 6
 BuildRequires:  python-ordereddict
@@ -44,9 +44,9 @@ designed to make HTTP requests easy for developers.
 Summary: HTTP library, written in Python, for human beings
 BuildRequires:  python3-devel
 BuildRequires:  python3-chardet
-BuildRequires:  python3-urllib3>=1.10.0
+BuildRequires:  python3-urllib3 >= 1.10
 Requires:       python3-chardet
-Requires:       python3-urllib3>=1.10.0
+Requires:       python3-urllib3 >= 1.10
 
 %description -n python3-requests
 Most existing Python modules for sending HTTP requests are extremely verbose and
@@ -142,7 +142,7 @@ popd
 
 %changelog
 * Tue Dec 16 2014 Ralph Bean <rbean@redhat.com> - 2.5.0-3
-- Pin python-urllib3 requirement at 1.10.0.
+- Pin python-urllib3 requirement at 1.10.
 - Fix requirement pinning syntax.
 
 * Thu Dec 11 2014 Ralph Bean <rbean@redhat.com> - 2.5.0-2
