@@ -5,8 +5,8 @@
 %endif
 
 Name:           python-requests
-Version:        2.5.0
-Release:        3%{?dist}
+Version:        2.5.1
+Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -141,6 +141,9 @@ popd
 %endif
 
 %changelog
+* Wed Feb 18 2015 Ralph Bean <rbean@redhat.com> - 2.5.1-1
+- new version
+
 * Tue Dec 16 2014 Ralph Bean <rbean@redhat.com> - 2.5.0-3
 - Pin python-urllib3 requirement at 1.10.
 - Fix requirement pinning syntax.
