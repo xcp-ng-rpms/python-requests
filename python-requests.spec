@@ -5,7 +5,7 @@
 %endif
 
 Name:           python-requests
-Version:        2.5.1
+Version:        2.5.3
 Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
@@ -141,6 +141,9 @@ popd
 %endif
 
 %changelog
+* Thu Feb 26 2015 Ralph Bean <rbean@redhat.com> - 2.5.3-1
+- new version
+
 * Wed Feb 18 2015 Ralph Bean <rbean@redhat.com> - 2.5.1-1
 - new version
 
