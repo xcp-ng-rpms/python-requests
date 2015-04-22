@@ -5,8 +5,8 @@
 %endif
 
 Name:           python-requests
-Version:        2.5.3
-Release:        2%{?dist}
+Version:        2.6.0
+Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -18,10 +18,6 @@ Patch0:         python-requests-system-cert-bundle.patch
 
 # Remove an unnecessary reference to a bundled compat lib in urllib3
 Patch1:         python-requests-remove-nested-bundling-dep.patch
-
-# Backport fix for CVE-2015-2296
-# https://github.com/kennethreitz/requests/commit/3bd8afbff29e50b38f889b2f688785a669b9aafc
-Patch2:         python-requests-dont-ascribe-cookies.patch
 
 BuildArch:      noarch
 BuildRequires:  python2-devel
@@ -64,8 +60,6 @@ designed to make HTTP requests easy for developers.
 
 %patch0 -p1
 %patch1 -p1
-
-%patch2 -p1
 
 # Unbundle the certificate bundle from mozilla.
 rm -rf requests/cacert.pem
@@ -147,6 +141,10 @@ popd
 %endif
 
 %changelog
+* Wed Apr 22 2015 Ralph Bean <rbean@redhat.com> - 2.6.0-1
+- new version
+- Remove patch for CVE-2015-2296, now included in the upstream release.
+
 * Mon Mar 16 2015 Ralph Bean <rbean@redhat.com> - 2.5.3-2
 - Backport fix for CVE-2015-2296.
 
