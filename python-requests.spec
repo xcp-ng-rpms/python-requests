@@ -5,7 +5,7 @@
 %endif
 
 Name:           python-requests
-Version:        2.6.0
+Version:        2.6.1
 Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
@@ -141,6 +141,9 @@ popd
 %endif
 
 %changelog
+* Thu Apr 23 2015 Ralph Bean <rbean@redhat.com> - 2.6.1-1
+- new version
+
 * Wed Apr 22 2015 Ralph Bean <rbean@redhat.com> - 2.6.0-1
 - new version
 - Remove patch for CVE-2015-2296, now included in the upstream release.
