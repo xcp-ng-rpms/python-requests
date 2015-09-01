@@ -17,6 +17,10 @@ Source0:        http://pypi.python.org/packages/source/r/requests/requests-%{ver
 Patch0:         python-requests-system-cert-bundle.patch
 
 # Remove an unnecessary reference to a bundled compat lib in urllib3
+# Some discussion with upstream:
+# - https://twitter.com/sigmavirus24/status/529816751651819520
+# - https://github.com/kennethreitz/requests/issues/1811
+# - https://github.com/kennethreitz/requests/pull/1812
 Patch1:         python-requests-remove-nested-bundling-dep.patch
 
 BuildArch:      noarch
