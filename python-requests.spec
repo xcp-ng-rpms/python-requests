@@ -48,9 +48,9 @@ designed to make HTTP requests easy for developers.
 Summary: HTTP library, written in Python, for human beings
 BuildRequires:  python3-devel
 BuildRequires:  python3-chardet
-BuildRequires:  python3-urllib3 == 1.10
+BuildRequires:  python3-urllib3 == 1.10.4
 Requires:       python3-chardet
-Requires:       python3-urllib3 == 1.10
+Requires:       python3-urllib3 == 1.10.4
 
 %description -n python3-requests
 Most existing Python modules for sending HTTP requests are extremely verbose and
