@@ -6,7 +6,7 @@
 
 Name:           python-requests
 Version:        2.7.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -26,11 +26,11 @@ Patch1:         python-requests-remove-nested-bundling-dep.patch
 BuildArch:      noarch
 BuildRequires:  python2-devel
 BuildRequires:  python-chardet
-BuildRequires:  python-urllib3 >= 1.10
+BuildRequires:  python-urllib3 == 1.10.4
 
 Requires:       ca-certificates
 Requires:       python-chardet
-Requires:       python-urllib3 >= 1.10
+Requires:       python-urllib3 == 1.10.4
 
 %if 0%{?rhel} && 0%{?rhel} <= 6
 BuildRequires:  python-ordereddict
@@ -48,9 +48,9 @@ designed to make HTTP requests easy for developers.
 Summary: HTTP library, written in Python, for human beings
 BuildRequires:  python3-devel
 BuildRequires:  python3-chardet
-BuildRequires:  python3-urllib3 >= 1.10
+BuildRequires:  python3-urllib3 == 1.10
 Requires:       python3-chardet
-Requires:       python3-urllib3 >= 1.10
+Requires:       python3-urllib3 == 1.10
 
 %description -n python3-requests
 Most existing Python modules for sending HTTP requests are extremely verbose and
@@ -145,6 +145,10 @@ popd
 %endif
 
 %changelog
+* Fri Sep 04 2015 Ralph Bean <rbean@redhat.com> - 2.7.0-3
+- Lock down the python-urllib3 version to the specific version we unbundled.
+  https://bugzilla.redhat.com/show_bug.cgi?id=1253823
+
 * Thu Jun 18 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.7.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 
