@@ -6,7 +6,7 @@
 
 Name:           python-requests
 Version:        2.7.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -23,7 +23,11 @@ Patch0:         python-requests-system-cert-bundle.patch
 # - https://github.com/kennethreitz/requests/pull/1812
 Patch1:         python-requests-remove-nested-bundling-dep.patch
 
+
 BuildArch:      noarch
+
+%{?python_provide:%python_provide python2-requests}
+
 BuildRequires:  python2-devel
 BuildRequires:  python-chardet
 BuildRequires:  python-urllib3 == 1.10.4
@@ -46,6 +50,9 @@ designed to make HTTP requests easy for developers.
 %if 0%{?_with_python3}
 %package -n python3-requests
 Summary: HTTP library, written in Python, for human beings
+
+%{?python_provide:%python_provide python2-requests}
+
 BuildRequires:  python3-devel
 BuildRequires:  python3-chardet
 BuildRequires:  python3-urllib3 == 1.10.4
@@ -145,6 +152,9 @@ popd
 %endif
 
 %changelog
+* Tue Sep 15 2015 Ralph Bean <rbean@redhat.com> - 2.7.0-4
+- Employ %%python_provides macro to provide python2-requests.
+
 * Fri Sep 04 2015 Ralph Bean <rbean@redhat.com> - 2.7.0-3
 - Lock down the python-urllib3 version to the specific version we unbundled.
   https://bugzilla.redhat.com/show_bug.cgi?id=1253823
