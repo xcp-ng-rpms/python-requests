@@ -6,7 +6,7 @@
 
 Name:           python-requests
 Version:        2.7.0
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -26,7 +26,12 @@ Patch1:         python-requests-remove-nested-bundling-dep.patch
 
 BuildArch:      noarch
 
-%{?python_provide:%python_provide python2-requests}
+
+# FIXME - move the python2 stuff into a python2 subpackage so we can use this
+# macro correctly.  See the comment from Carl George in this bz ticket:
+# https://bugzilla.redhat.com/show_bug.cgi?id=1241671#c5
+Provides:       python2-requests
+#%%{?python_provide:%%python_provide python2-requests}
 
 BuildRequires:  python2-devel
 BuildRequires:  python-chardet
@@ -152,6 +157,10 @@ popd
 %endif
 
 %changelog
+* Thu Sep 17 2015 Ralph Bean <rbean@redhat.com> - 2.7.0-6
+- Replace the provides macro with a plain provides field for now until we can
+  re-organize this package into two different subpackages.
+
 * Thu Sep 17 2015 Ralph Bean <rbean@redhat.com> - 2.7.0-5
 - Remove 'provides: python2-requests' from the python3 subpackage, obviously.
 
