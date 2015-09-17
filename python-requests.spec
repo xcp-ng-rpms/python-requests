@@ -6,7 +6,7 @@
 
 Name:           python-requests
 Version:        2.7.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -51,7 +51,7 @@ designed to make HTTP requests easy for developers.
 %package -n python3-requests
 Summary: HTTP library, written in Python, for human beings
 
-%{?python_provide:%python_provide python2-requests}
+%{?python_provide:%python_provide python3-requests}
 
 BuildRequires:  python3-devel
 BuildRequires:  python3-chardet
@@ -152,6 +152,9 @@ popd
 %endif
 
 %changelog
+* Thu Sep 17 2015 Ralph Bean <rbean@redhat.com> - 2.7.0-5
+- Remove 'provides: python2-requests' from the python3 subpackage, obviously.
+
 * Tue Sep 15 2015 Ralph Bean <rbean@redhat.com> - 2.7.0-4
 - Employ %%python_provides macro to provide python2-requests.
 
