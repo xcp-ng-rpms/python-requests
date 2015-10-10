@@ -4,9 +4,11 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print (get_python_lib())")}
 %endif
 
+%global urllib3_unbundled_version 1.10.4
+
 Name:           python-requests
 Version:        2.7.0
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -23,6 +25,9 @@ Patch0:         python-requests-system-cert-bundle.patch
 # - https://github.com/kennethreitz/requests/pull/1812
 Patch1:         python-requests-remove-nested-bundling-dep.patch
 
+# Tell setuptools about what version of urllib3 we're unbundling
+# - https://github.com/kennethreitz/requests/issues/2816
+Patch2:         python-requests-urllib3-at-%{urllib3_unbundled_version}.patch
 
 BuildArch:      noarch
 
@@ -35,11 +40,11 @@ Provides:       python2-requests
 
 BuildRequires:  python2-devel
 BuildRequires:  python-chardet
-BuildRequires:  python-urllib3 == 1.10.4
+BuildRequires:  python-urllib3 == %{urllib3_unbundled_version}
 
 Requires:       ca-certificates
 Requires:       python-chardet
-Requires:       python-urllib3 == 1.10.4
+Requires:       python-urllib3 == %{urllib3_unbundled_version}
 
 %if 0%{?rhel} && 0%{?rhel} <= 6
 BuildRequires:  python-ordereddict
@@ -60,9 +65,9 @@ Summary: HTTP library, written in Python, for human beings
 
 BuildRequires:  python3-devel
 BuildRequires:  python3-chardet
-BuildRequires:  python3-urllib3 == 1.10.4
+BuildRequires:  python3-urllib3 == %{urllib3_unbundled_version}
 Requires:       python3-chardet
-Requires:       python3-urllib3 == 1.10.4
+Requires:       python3-urllib3 == %{urllib3_unbundled_version}
 
 %description -n python3-requests
 Most existing Python modules for sending HTTP requests are extremely verbose and
@@ -76,6 +81,7 @@ designed to make HTTP requests easy for developers.
 
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 # Unbundle the certificate bundle from mozilla.
 rm -rf requests/cacert.pem
@@ -157,6 +163,10 @@ popd
 %endif
 
 %changelog
+* Sat Oct 10 2015 Ralph Bean <rbean@redhat.com> - 2.7.0-7
+- Tell setuptools about what version of urllib3 we're unbundling
+  for https://github.com/kennethreitz/requests/issues/2816
+
 * Thu Sep 17 2015 Ralph Bean <rbean@redhat.com> - 2.7.0-6
 - Replace the provides macro with a plain provides field for now until we can
   re-organize this package into two different subpackages.
