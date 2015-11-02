@@ -8,7 +8,7 @@
 
 Name:           python-requests
 Version:        2.7.0
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -163,6 +163,9 @@ popd
 %endif
 
 %changelog
+* Mon Nov 02 2015 Robert Kuska <rkuska@redhat.com> - 2.7.0-8
+- Rebuilt for Python3.5 rebuild
+
 * Sat Oct 10 2015 Ralph Bean <rbean@redhat.com> - 2.7.0-7
 - Tell setuptools about what version of urllib3 we're unbundling
   for https://github.com/kennethreitz/requests/issues/2816
