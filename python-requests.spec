@@ -4,10 +4,10 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print (get_python_lib())")}
 %endif
 
-%global urllib3_unbundled_version 1.12
+%global urllib3_unbundled_version 1.13
 
 Name:           python-requests
-Version:        2.8.1
+Version:        2.9.0
 Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
@@ -163,6 +163,9 @@ popd
 %endif
 
 %changelog
+* Fri Dec 18 2015 Ralph Bean <rbean@redhat.com> - 2.9.0-1
+- new version
+
 * Mon Dec 14 2015 Ralph Bean <rbean@redhat.com> - 2.8.1-1
 - Latest upstream.
 - Bump hard dep on urllib3 to 1.12.
