@@ -17,7 +17,7 @@ index f98f528..77a370c 100755
  
 -requires = []
 +requires = [
-+    'urllib3==1.13',
++    'urllib3==1.13.1',
 +]
  
  version = ''
