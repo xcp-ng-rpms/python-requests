@@ -1,14 +1,17 @@
-%if 0%{?fedora}
 %global _with_python3 1
-%else
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print (get_python_lib())")}
+
+%if 0%{?fedora}
+%{!?python3_pkgversion: %global python3_pkgversion 3}
+%else 
+%{!?python3_pkgversion: %global python3_pkgversion 34}
 %endif
 
 %global urllib3_unbundled_version 1.13.1
 
 Name:           python-requests
 Version:        2.9.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -58,18 +61,18 @@ capabilities you should need, but the API is thoroughly broken. This library is
 designed to make HTTP requests easy for developers.
 
 %if 0%{?_with_python3}
-%package -n python3-requests
+%package -n python%{python3_pkgversion}-requests
 Summary: HTTP library, written in Python, for human beings
 
-%{?python_provide:%python_provide python3-requests}
+%{?python_provide:%python_provide python%{python3_pkgversion}-requests}
 
-BuildRequires:  python3-devel
-BuildRequires:  python3-chardet
-BuildRequires:  python3-urllib3 == %{urllib3_unbundled_version}
-Requires:       python3-chardet
-Requires:       python3-urllib3 == %{urllib3_unbundled_version}
+BuildRequires:  python%{python3_pkgversion}-devel
+BuildRequires:  python%{python3_pkgversion}-chardet
+BuildRequires:  python%{python3_pkgversion}-urllib3 == %{urllib3_unbundled_version}
+Requires:       python%{python3_pkgversion}-chardet
+Requires:       python%{python3_pkgversion}-urllib3 == %{urllib3_unbundled_version}
 
-%description -n python3-requests
+%description -n python%{python3_pkgversion}-requests
 Most existing Python modules for sending HTTP requests are extremely verbose and
 cumbersome. Python’s built-in urllib2 module provides most of the HTTP
 capabilities you should need, but the API is thoroughly broken. This library is
@@ -154,7 +157,7 @@ popd
 %{python_sitelib}/requests/*
 
 %if 0%{?_with_python3}
-%files -n python3-requests
+%files -n python%{python3_pkgversion}-requests
 %{!?_licensedir:%global license %%doc}
 %license LICENSE
 %doc NOTICE README.rst HISTORY.rst
