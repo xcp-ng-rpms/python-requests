@@ -7,16 +7,16 @@
 %{!?python3_pkgversion: %global python3_pkgversion 34}
 %endif
 
-%global urllib3_unbundled_version 1.13.1
+%global urllib3_unbundled_version 1.15.1
 
 Name:           python-requests
-Version:        2.9.1
-Release:        3%{?dist}
+Version:        2.10.0
+Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
-URL:            http://pypi.python.org/pypi/requests
-Source0:        http://pypi.python.org/packages/source/r/requests/requests-%{version}.tar.gz
+URL:            https://pypi.io/project/requests
+Source0:        https://pypi.io/packages/source/r/requests/requests-%{version}.tar.gz
 # Explicitly use the system certificates in ca-certificates.
 # https://bugzilla.redhat.com/show_bug.cgi?id=904614
 Patch0:         python-requests-system-cert-bundle.patch
