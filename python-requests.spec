@@ -3,7 +3,7 @@
 
 %if 0%{?fedora}
 %{!?python3_pkgversion: %global python3_pkgversion 3}
-%else 
+%else
 %{!?python3_pkgversion: %global python3_pkgversion 34}
 %endif
 
@@ -11,7 +11,7 @@
 
 Name:           python-requests
 Version:        2.10.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -34,12 +34,15 @@ Patch2:         python-requests-urllib3-at-%{urllib3_unbundled_version}.patch
 
 BuildArch:      noarch
 
+%description
+Most existing Python modules for sending HTTP requests are extremely verbose and
+cumbersome. Python’s built-in urllib2 module provides most of the HTTP
+capabilities you should need, but the API is thoroughly broken. This library is
+designed to make HTTP requests easy for developers.
 
-# FIXME - move the python2 stuff into a python2 subpackage so we can use this
-# macro correctly.  See the comment from Carl George in this bz ticket:
-# https://bugzilla.redhat.com/show_bug.cgi?id=1241671#c5
-Provides:       python2-requests
-#%%{?python_provide:%%python_provide python2-requests}
+%package -n python2-requests
+Summary: HTTP library, written in Python, for human beings
+%{?python_provide:%python_provide python2-requests}
 
 BuildRequires:  python2-devel
 BuildRequires:  python-chardet
@@ -54,10 +57,10 @@ BuildRequires:  python-ordereddict
 Requires:       python-ordereddict
 %endif
 
-%description
-Most existing Python modules for sending HTTP requests are extremely verbose and 
-cumbersome. Python’s built-in urllib2 module provides most of the HTTP 
-capabilities you should need, but the API is thoroughly broken. This library is 
+%description -n python2-requests
+Most existing Python modules for sending HTTP requests are extremely verbose and
+cumbersome. Python’s built-in urllib2 module provides most of the HTTP
+capabilities you should need, but the API is thoroughly broken. This library is
 designed to make HTTP requests easy for developers.
 
 %if 0%{?_with_python3}
@@ -147,7 +150,7 @@ popd
 %endif
 
 
-%files
+%files -n python2-requests
 %defattr(-,root,root,-)
 %{!?_licensedir:%global license %%doc}
 %license LICENSE
@@ -166,6 +169,9 @@ popd
 %endif
 
 %changelog
+* Thu Jun 02 2016 Ralph Bean <rbean@redhat.com> - 2.10.0-2
+- Fix python2 subpackage to comply with guidelines.
+
 * Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 2.9.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
