@@ -11,7 +11,7 @@
 
 Name:           python-requests
 Version:        2.10.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -46,11 +46,11 @@ Summary: HTTP library, written in Python, for human beings
 
 BuildRequires:  python2-devel
 BuildRequires:  python-chardet
-BuildRequires:  python-urllib3 == %{urllib3_unbundled_version}
+BuildRequires:  python2-urllib3 == %{urllib3_unbundled_version}
 
 Requires:       ca-certificates
 Requires:       python-chardet
-Requires:       python-urllib3 == %{urllib3_unbundled_version}
+Requires:       python2-urllib3 == %{urllib3_unbundled_version}
 
 %if 0%{?rhel} && 0%{?rhel} <= 6
 BuildRequires:  python-ordereddict
@@ -126,8 +126,8 @@ popd
 %endif
 
 %{__python} setup.py install --skip-build --root $RPM_BUILD_ROOT
-ln -s ../../chardet %{buildroot}/%{python_sitelib}/requests/packages/chardet
-ln -s ../../urllib3 %{buildroot}/%{python_sitelib}/requests/packages/urllib3
+ln -s ../../chardet %{buildroot}/%{python2_sitelib}/requests/packages/chardet
+ln -s ../../urllib3 %{buildroot}/%{python2_sitelib}/requests/packages/urllib3
 
 ## The tests succeed if run locally, but fail in koji.
 ## They require an active network connection to query httpbin.org
@@ -155,9 +155,9 @@ popd
 %{!?_licensedir:%global license %%doc}
 %license LICENSE
 %doc NOTICE README.rst HISTORY.rst
-%{python_sitelib}/*.egg-info
-%dir %{python_sitelib}/requests
-%{python_sitelib}/requests/*
+%{python2_sitelib}/*.egg-info
+%dir %{python2_sitelib}/requests
+%{python2_sitelib}/requests/*
 
 %if 0%{?_with_python3}
 %files -n python%{python3_pkgversion}-requests
@@ -169,6 +169,9 @@ popd
 %endif
 
 %changelog
+* Fri Jul 15 2016 Ralph Bean <rbean@redhat.com> - 2.10.0-3
+- Update python2 packaging.
+
 * Thu Jun 02 2016 Ralph Bean <rbean@redhat.com> - 2.10.0-2
 - Fix python2 subpackage to comply with guidelines.
 
