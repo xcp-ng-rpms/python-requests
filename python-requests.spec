@@ -11,7 +11,7 @@
 
 Name:           python-requests
 Version:        2.10.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -169,6 +169,9 @@ popd
 %endif
 
 %changelog
+* Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.10.0-4
+- https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
+
 * Fri Jul 15 2016 Ralph Bean <rbean@redhat.com> - 2.10.0-3
 - Update python2 packaging.
 
