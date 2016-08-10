@@ -7,11 +7,11 @@
 %{!?python3_pkgversion: %global python3_pkgversion 34}
 %endif
 
-%global urllib3_unbundled_version 1.15.1
+%global urllib3_unbundled_version 1.16
 
 Name:           python-requests
-Version:        2.10.0
-Release:        4%{?dist}
+Version:        2.11.0
+Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -169,6 +169,9 @@ popd
 %endif
 
 %changelog
+* Wed Aug 10 2016 Kevin Fenzi <kevin@scrye.com> - 2.11.0-1
+- Update to 2.11.0. Fixes #1365332
+
 * Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.10.0-4
 - https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
 
