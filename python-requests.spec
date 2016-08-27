@@ -10,7 +10,7 @@
 %global urllib3_unbundled_version 1.16
 
 Name:           python-requests
-Version:        2.11.0
+Version:        2.11.1
 Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
@@ -169,6 +169,9 @@ popd
 %endif
 
 %changelog
+* Sat Aug 27 2016 Kevin Fenzi <kevin@scrye.com> - 2.11.1-1
+- Update to 2.11.1. Fixes #1370814
+
 * Wed Aug 10 2016 Kevin Fenzi <kevin@scrye.com> - 2.11.0-1
 - Update to 2.11.0. Fixes #1365332
 
