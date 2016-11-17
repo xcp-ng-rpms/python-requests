@@ -7,10 +7,10 @@
 %{!?python3_pkgversion: %global python3_pkgversion 34}
 %endif
 
-%global urllib3_unbundled_version 1.16
+%global urllib3_unbundled_version 1.19.1
 
 Name:           python-requests
-Version:        2.11.1
+Version:        2.12.1
 Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
@@ -51,6 +51,7 @@ BuildRequires:  python2-urllib3 == %{urllib3_unbundled_version}
 Requires:       ca-certificates
 Requires:       python-chardet
 Requires:       python2-urllib3 == %{urllib3_unbundled_version}
+Requires:       python-idna
 
 %if 0%{?rhel} && 0%{?rhel} <= 6
 BuildRequires:  python-ordereddict
@@ -74,6 +75,7 @@ BuildRequires:  python%{python3_pkgversion}-chardet
 BuildRequires:  python%{python3_pkgversion}-urllib3 == %{urllib3_unbundled_version}
 Requires:       python%{python3_pkgversion}-chardet
 Requires:       python%{python3_pkgversion}-urllib3 == %{urllib3_unbundled_version}
+Requires:       python%{python3_pkgversion}-idna
 
 %description -n python%{python3_pkgversion}-requests
 Most existing Python modules for sending HTTP requests are extremely verbose and
@@ -105,6 +107,7 @@ pushd %{py3dir}
 # Unbundle chardet and urllib3.  We replace these with symlinks to system libs.
 rm -rf build/lib/requests/packages/chardet
 rm -rf build/lib/requests/packages/urllib3
+rm -rf build/lib/requests/packages/idna
 
 popd
 %endif
@@ -114,6 +117,7 @@ popd
 # Unbundle chardet and urllib3.  We replace these with symlinks to system libs.
 rm -rf build/lib/requests/packages/chardet
 rm -rf build/lib/requests/packages/urllib3
+rm -rf build/lib/requests/packages/idna
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -122,12 +126,14 @@ pushd %{py3dir}
 %{__python3} setup.py install --skip-build --root $RPM_BUILD_ROOT
 ln -s ../../chardet %{buildroot}/%{python3_sitelib}/requests/packages/chardet
 ln -s ../../urllib3 %{buildroot}/%{python3_sitelib}/requests/packages/urllib3
+ln -s ../../idna %{buildroot}/%{python3_sitelib}/requests/packages/idna
 popd
 %endif
 
 %{__python} setup.py install --skip-build --root $RPM_BUILD_ROOT
 ln -s ../../chardet %{buildroot}/%{python2_sitelib}/requests/packages/chardet
 ln -s ../../urllib3 %{buildroot}/%{python2_sitelib}/requests/packages/urllib3
+ln -s ../../idna %{buildroot}/%{python2_sitelib}/requests/packages/idna
 
 ## The tests succeed if run locally, but fail in koji.
 ## They require an active network connection to query httpbin.org
@@ -169,6 +175,10 @@ popd
 %endif
 
 %changelog
+* Thu Nov 17 2016 Jeremy Cline <jeremy@jcline.org> - 2.12.1-1
+- Update to 2.12.1. Fixes #1395469
+- Unbundle idna, a new upstream dependency
+
 * Sat Aug 27 2016 Kevin Fenzi <kevin@scrye.com> - 2.11.1-1
 - Update to 2.11.1. Fixes #1370814
 

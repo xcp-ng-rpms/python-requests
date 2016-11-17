@@ -1,0 +1,26 @@
+From 417c2b103a7c4be9dcc2072d9c6c61e687fbe657 Mon Sep 17 00:00:00 2001
+From: Jeremy Cline <jeremy@jcline.org>
+Date: Thu, 17 Nov 2016 17:02:22 -0500
+Subject: [PATCH] python requests urllib3 at 1.19.1
+
+Signed-off-by: Jeremy Cline <jeremy@jcline.org>
+---
+ setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index c240624..bfadfb9 100755
+--- a/setup.py
++++ b/setup.py
+@@ -46,7 +46,7 @@ packages = [
+     'requests.packages.urllib3.packages.backports',
+ ]
+ 
+-requires = []
++requires = ['urllib3==1.19.1']
+ test_requirements = ['pytest>=2.8.0', 'pytest-httpbin==0.0.7', 'pytest-cov']
+ 
+ with open('requests/__init__.py', 'r') as fd:
+-- 
+2.9.3
+
