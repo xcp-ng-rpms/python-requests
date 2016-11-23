@@ -1,0 +1,35 @@
+From 35d7b9264b5ae2c9b327d63464ec299b3d4bda2c Mon Sep 17 00:00:00 2001
+From: Christian Heimes <christian@python.org>
+Date: Mon, 21 Nov 2016 18:00:24 +0100
+Subject: [PATCH] Restrict URL preparation to HTTP/HTTPS
+
+Requests treats all URLs starting with the string 'http' as HTTP URLs.
+Preparation with IDNA breaks non-standard URIs like http+unix. Requests
+now prepares only URLs with prefix http:// and https://.
+
+Signed-off-by: Christian Heimes <christian@python.org>
+Signed-off-by: Jeremy Cline <jeremy@jcline.org>
+---
+ requests/models.py     |  6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/requests/models.py b/requests/models.py
+index a4bd41b..ca9e6fe 100644
+--- a/requests/models.py
++++ b/requests/models.py
+@@ -344,9 +344,9 @@ class PreparedRequest(RequestEncodingMixin, RequestHooksMixin):
+             url = unicode(url) if is_py2 else str(url)
+ 
+         # Don't do any URL preparation for non-HTTP schemes like `mailto`,
+-        # `data` etc to work around exceptions from `url_parse`, which
+-        # handles RFC 3986 only.
+-        if ':' in url and not url.lower().startswith('http'):
++        # `data`, `http+unix` etc to work around exceptions from `url_parse`,
++        # which handles RFC 3986 only.
++        if ':' in url and not url.lower().startswith(('http://', 'https://')):
+             self.url = url
+             return
+
+-- 
+2.9.3
+

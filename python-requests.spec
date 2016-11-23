@@ -11,7 +11,7 @@
 
 Name:           python-requests
 Version:        2.12.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -31,6 +31,10 @@ Patch1:         python-requests-remove-nested-bundling-dep.patch
 # Tell setuptools about what version of urllib3 we're unbundling
 # - https://github.com/kennethreitz/requests/issues/2816
 Patch2:         python-requests-urllib3-at-%{urllib3_unbundled_version}.patch
+
+# Backport of https://github.com/kennethreitz/requests/pull/3713
+# This patch should be removed after the 2.12.2 or 2.13 release.
+Patch3:         0001-Restrict-URL-preparation-to-HTTP-HTTPS.patch
 
 BuildArch:      noarch
 
@@ -90,6 +94,7 @@ designed to make HTTP requests easy for developers.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 # Unbundle the certificate bundle from mozilla.
 rm -rf requests/cacert.pem
@@ -175,6 +180,9 @@ popd
 %endif
 
 %changelog
+* Wed Nov 23 2016 Jeremy Cline <jeremy@jcline.org> - 2.12.1-2
+- Backport #3713. Fixes #1397149
+
 * Thu Nov 17 2016 Jeremy Cline <jeremy@jcline.org> - 2.12.1-1
 - Update to 2.12.1. Fixes #1395469
 - Unbundle idna, a new upstream dependency
