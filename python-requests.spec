@@ -10,8 +10,8 @@
 %global urllib3_unbundled_version 1.19.1
 
 Name:           python-requests
-Version:        2.12.3
-Release:        2%{?dist}
+Version:        2.12.4
+Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -175,6 +175,9 @@ popd
 %endif
 
 %changelog
+* Tue Dec 20 2016 Jeremy Cline <jeremy@jcline.org> - 2.12.4-1
+- Update to 2.12.4. Fixes #1404680
+
 * Tue Dec 13 2016 Stratakis Charalampos <cstratak@redhat.com> - 2.12.3-2
 - Rebuild for Python 3.6
 
