@@ -135,8 +135,10 @@ ln -s ../../chardet %{buildroot}/%{python2_sitelib}/requests/packages/chardet
 ln -s ../../urllib3 %{buildroot}/%{python2_sitelib}/requests/packages/urllib3
 ln -s ../../idna %{buildroot}/%{python2_sitelib}/requests/packages/idna
 
-## The tests succeed if run locally, but fail in koji.
-## They require an active network connection to query httpbin.org
+## We could now run the test suite if we package python-pytest-httpbin:
+## https://pypi.python.org/pypi/pytest-httpbin
+## Because upstream ported to that in 2015:
+## https://github.com/kennethreitz/requests/issues/2184
 %check
 
 #%%{__python} test_requests.py
