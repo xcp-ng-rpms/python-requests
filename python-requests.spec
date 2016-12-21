@@ -11,7 +11,7 @@
 
 Name:           python-requests
 Version:        2.12.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -175,6 +175,9 @@ popd
 %endif
 
 %changelog
+* Wed Dec 21 2016 Kevin Fenzi <kevin@scrye.com> - 2.12.4-2
+- Rebuild for Python 3.6 again.
+
 * Tue Dec 20 2016 Jeremy Cline <jeremy@jcline.org> - 2.12.4-1
 - Update to 2.12.4. Fixes #1404680
 
