@@ -11,12 +11,18 @@
 
 Name:           python-requests
 Version:        2.12.4
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
 URL:            https://pypi.io/project/requests
 Source0:        https://pypi.io/packages/source/r/requests/requests-%{version}.tar.gz
+# To generate:
+# git clone https://github.com/kennethreitz/requests.git
+# cd requests
+# git checkout v%{version}
+# tar cvzf requests-%{version}-tests.tar.gz tests/
+Source1:        requests-2.12.4-tests.tar.gz
 # Explicitly use the system certificates in ca-certificates.
 # https://bugzilla.redhat.com/show_bug.cgi?id=904614
 Patch0:         python-requests-system-cert-bundle.patch
@@ -31,6 +37,13 @@ Patch1:         python-requests-remove-nested-bundling-dep.patch
 # Tell setuptools about what version of urllib3 we're unbundling
 # - https://github.com/kennethreitz/requests/issues/2816
 Patch2:         python-requests-urllib3-at-%{urllib3_unbundled_version}.patch
+
+# Use 127.0.0.1 not localhost for socket.bind() in the Server test
+# class, to fix tests in Koji's no-network environment
+# This probably isn't really upstreamable, because I guess localhost
+# could technically be IPv6 or something, and our no-network env is
+# a pretty odd one so this is a niche requirement.
+Patch3:         requests-2.12.4-tests_nonet.patch
 
 BuildArch:      noarch
 
@@ -47,6 +60,12 @@ Summary: HTTP library, written in Python, for human beings
 BuildRequires:  python2-devel
 BuildRequires:  python-chardet
 BuildRequires:  python2-urllib3 == %{urllib3_unbundled_version}
+# For tests
+BuildRequires:  python2-pytest
+BuildRequires:  python2-pytest-cov
+BuildRequires:  python2-pytest-httpbin
+BuildRequires:  python2-pytest-mock
+
 
 Requires:       ca-certificates
 Requires:       python-chardet
@@ -73,6 +92,12 @@ Summary: HTTP library, written in Python, for human beings
 BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  python%{python3_pkgversion}-chardet
 BuildRequires:  python%{python3_pkgversion}-urllib3 == %{urllib3_unbundled_version}
+# For tests
+BuildRequires:  python%{python3_pkgversion}-pytest
+BuildRequires:  python%{python3_pkgversion}-pytest-cov
+BuildRequires:  python%{python3_pkgversion}-pytest-httpbin
+BuildRequires:  python%{python3_pkgversion}-pytest-mock
+
 Requires:       python%{python3_pkgversion}-chardet
 Requires:       python%{python3_pkgversion}-urllib3 == %{urllib3_unbundled_version}
 Requires:       python%{python3_pkgversion}-idna
@@ -85,11 +110,12 @@ designed to make HTTP requests easy for developers.
 %endif
 
 %prep
-%setup -q -n requests-%{version}
+%setup -q -n requests-%{version} -a 1
 
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 # Unbundle the certificate bundle from mozilla.
 rm -rf requests/cacert.pem
@@ -135,25 +161,12 @@ ln -s ../../chardet %{buildroot}/%{python2_sitelib}/requests/packages/chardet
 ln -s ../../urllib3 %{buildroot}/%{python2_sitelib}/requests/packages/urllib3
 ln -s ../../idna %{buildroot}/%{python2_sitelib}/requests/packages/idna
 
-## We could now run the test suite if we package python-pytest-httpbin:
-## https://pypi.python.org/pypi/pytest-httpbin
-## Because upstream ported to that in 2015:
-## https://github.com/kennethreitz/requests/issues/2184
 %check
 
-#%%{__python} test_requests.py
-#%%if 0%%{?_with_python3}
-#pushd %%{py3dir}
-#%%{__python3} test_requests.py
-#popd
-#%%endif
-
-# At very, very least, we'll try to start python and import requests
-PYTHONPATH=. %{__python} -c "import requests"
-
+PYTHONPATH=./ py.test
 %if 0%{?_with_python3}
 pushd %{py3dir}
-PYTHONPATH=. %{__python3} -c "import requests"
+PYTHONPATH=./ py.test-%{python3_pkgversion}
 popd
 %endif
 
@@ -177,6 +190,9 @@ popd
 %endif
 
 %changelog
+* Fri Dec 30 2016 Adam Williamson <awilliam@redhat.com> - 2.12.4-3
+- Include and enable tests (now python-pytest-httpbin is packaged)
+
 * Wed Dec 21 2016 Kevin Fenzi <kevin@scrye.com> - 2.12.4-2
 - Rebuild for Python 3.6 again.
 
