@@ -7,22 +7,16 @@
 %{!?python3_pkgversion: %global python3_pkgversion 34}
 %endif
 
-%global urllib3_unbundled_version 1.19.1
+%global urllib3_unbundled_version 1.20
 
 Name:           python-requests
-Version:        2.12.4
-Release:        3%{?dist}
+Version:        2.13.0
+Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
 URL:            https://pypi.io/project/requests
-Source0:        https://pypi.io/packages/source/r/requests/requests-%{version}.tar.gz
-# To generate:
-# git clone https://github.com/kennethreitz/requests.git
-# cd requests
-# git checkout v%{version}
-# tar cvzf requests-%{version}-tests.tar.gz tests/
-Source1:        requests-2.12.4-tests.tar.gz
+Source0:        https://github.com/kennethreitz/requests/archive/v%{version}/requests-v%{version}.tar.gz
 # Explicitly use the system certificates in ca-certificates.
 # https://bugzilla.redhat.com/show_bug.cgi?id=904614
 Patch0:         python-requests-system-cert-bundle.patch
@@ -110,7 +104,7 @@ designed to make HTTP requests easy for developers.
 %endif
 
 %prep
-%setup -q -n requests-%{version} -a 1
+%setup -q -n requests-%{version}
 
 %patch0 -p1
 %patch1 -p1
@@ -190,6 +184,9 @@ popd
 %endif
 
 %changelog
+* Thu Feb 09 2017 Jeremy Cline <jeremy@jcline.org> - 2.13.0-1
+- Update to 2.13.0 (#1418138)
+
 * Fri Dec 30 2016 Adam Williamson <awilliam@redhat.com> - 2.12.4-3
 - Include and enable tests (now python-pytest-httpbin is packaged)
 
