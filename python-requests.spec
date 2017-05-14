@@ -157,7 +157,7 @@ ln -s ../../idna %{buildroot}/%{python2_sitelib}/requests/packages/idna
 
 %check
 
-%if 0%{?_module_build}
+%if ! 0%{?_module_build}
 # Don't run tests on module-build for now
 # See: https://bugzilla.redhat.com/show_bug.cgi?id=1450608
 PYTHONPATH=./ py.test
