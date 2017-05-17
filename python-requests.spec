@@ -152,12 +152,16 @@ ln -s ../../idna %{buildroot}/%{python2_sitelib}/requests/packages/idna
 
 %check
 
+%if ! 0%{?_module_build}
+# Don't run tests on module-build for now
+# See: https://bugzilla.redhat.com/show_bug.cgi?id=1450608
 PYTHONPATH=./ py.test
 %if 0%{?_with_python3}
 pushd %{py3dir}
 PYTHONPATH=./ py.test-%{python3_pkgversion}
 popd
 %endif
+%endif #_module_build
 
 
 %files -n python2-requests
@@ -182,6 +186,9 @@ popd
 * Wed May 17 2017 Jeremy Cline <jeremy@jcline.org> - 2.14.2-1
 - Update to 2.14.2 (#1449432)
 - Switch to autosetup to apply patches
+
+* Sun May 14 2017 Stephen Gallagher <sgallagh@redhat.com> - 2.13.0-2
+- Don't run tests when building as a module
 
 * Thu Feb 09 2017 Jeremy Cline <jeremy@jcline.org> - 2.13.0-1
 - Update to 2.13.0 (#1418138)
