@@ -7,10 +7,10 @@
 %{!?python3_pkgversion: %global python3_pkgversion 34}
 %endif
 
-%global urllib3_unbundled_version 1.20
+%global urllib3_unbundled_version 1.21.1
 
 Name:           python-requests
-Version:        2.13.0
+Version:        2.14.2
 Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
@@ -104,12 +104,7 @@ designed to make HTTP requests easy for developers.
 %endif
 
 %prep
-%setup -q -n requests-%{version}
-
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
+%autosetup -p1 -n requests-%{version}
 
 # Unbundle the certificate bundle from mozilla.
 rm -rf requests/cacert.pem
@@ -184,6 +179,10 @@ popd
 %endif
 
 %changelog
+* Wed May 17 2017 Jeremy Cline <jeremy@jcline.org> - 2.14.2-1
+- Update to 2.14.2 (#1449432)
+- Switch to autosetup to apply patches
+
 * Thu Feb 09 2017 Jeremy Cline <jeremy@jcline.org> - 2.13.0-1
 - Update to 2.13.0 (#1418138)
 

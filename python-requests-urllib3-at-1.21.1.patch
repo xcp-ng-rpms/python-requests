@@ -1,7 +1,7 @@
-From 46c751c2b8423038863cd619b8301a9f6df8570d Mon Sep 17 00:00:00 2001
+From e44b99214a953fcc68227a7182f2fecd55c58267 Mon Sep 17 00:00:00 2001
 From: Jeremy Cline <jeremy@jcline.org>
-Date: Thu, 19 Jan 2017 10:41:21 -0500
-Subject: [PATCH] Update setup.py for urllib3 at 1.20
+Date: Wed, 17 May 2017 11:57:23 -0400
+Subject: [PATCH] python requests urllib3 at 1.21.1
 
 Signed-off-by: Jeremy Cline <jeremy@jcline.org>
 ---
@@ -9,18 +9,18 @@ Signed-off-by: Jeremy Cline <jeremy@jcline.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/setup.py b/setup.py
-index b162348..daf4a23 100755
+index 6ad0bc3..50ae1a1 100755
 --- a/setup.py
 +++ b/setup.py
-@@ -46,7 +46,7 @@ packages = [
-     'requests.packages.urllib3.packages.backports',
+@@ -48,7 +48,7 @@ packages = [
+     'requests.packages.urllib3.contrib._securetransport',
  ]
  
 -requires = []
-+requires = ['urllib3==1.20']
++requires = ['urllib3==1.21.1']
  test_requirements = ['pytest>=2.8.0', 'pytest-httpbin==0.0.7', 'pytest-cov', 'pytest-mock']
  
  with open('requests/__init__.py', 'r') as fd:
 -- 
-2.9.3
+2.9.4
 
