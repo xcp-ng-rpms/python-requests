@@ -1,0 +1,36 @@
+From 5bce3f425c5bd59dccdd054f7f27baceb3cf3fb4 Mon Sep 17 00:00:00 2001
+From: Jeremy Cline <jeremy@jcline.org>
+Date: Mon, 19 Jun 2017 16:09:02 -0400
+Subject: [PATCH] Patch requests/certs.py to use the system CA bundle
+
+Signed-off-by: Jeremy Cline <jeremy@jcline.org>
+---
+ requests/certs.py | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/requests/certs.py b/requests/certs.py
+index d1a378d..7b103ba 100644
+--- a/requests/certs.py
++++ b/requests/certs.py
+@@ -11,8 +11,17 @@ only one — the one from the certifi package.
+ If you are packaging Requests, e.g., for a Linux distribution or a managed
+ environment, you can change the definition of where() to return a separately
+ packaged CA bundle.
++
++This Fedora-patched package returns "/etc/pki/tls/certs/ca-bundle.crt" provided
++by the ca-certificates RPM package.
+ """
+-from certifi import where
++try:
++    from certifi import where
++except ImportError:
++    def where():
++        """Return the absolute path to the system CA bundle."""
++        return '/etc/pki/tls/certs/ca-bundle.crt'
++
+ 
+ if __name__ == '__main__':
+     print(where())
+-- 
+2.9.4
+

@@ -1,0 +1,29 @@
+From 75f027ac8bc55ad280f7bf72a25db1ce8c1fc76d Mon Sep 17 00:00:00 2001
+From: Jeremy Cline <jeremy@jcline.org>
+Date: Mon, 19 Jun 2017 16:19:53 -0400
+Subject: [PATCH] Don't import OrderedDict from urllib3
+
+Signed-off-by: Jeremy Cline <jeremy@jcline.org>
+---
+ requests/compat.py | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/requests/compat.py b/requests/compat.py
+index 5c09ea8..61fa0c8 100644
+--- a/requests/compat.py
++++ b/requests/compat.py
+@@ -46,7 +46,10 @@ if is_py2:
+     from Cookie import Morsel
+     from StringIO import StringIO
+ 
+-    from urllib3.packages.ordered_dict import OrderedDict
++    try:
++        from collections import OrderedDict  # py2.7+
++    except:
++        from ordereddict import OrderedDict  # py2.6 and lower (el6, etc.
+ 
+     builtin_str = str
+     bytes = str
+-- 
+2.9.4
+

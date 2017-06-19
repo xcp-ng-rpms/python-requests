@@ -7,30 +7,28 @@
 %{!?python3_pkgversion: %global python3_pkgversion 34}
 %endif
 
-%global urllib3_unbundled_version 1.21.1
-
 Name:           python-requests
-Version:        2.14.2
+Version:        2.18.1
 Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
 URL:            https://pypi.io/project/requests
-Source0:        https://github.com/kennethreitz/requests/archive/v%{version}/requests-v%{version}.tar.gz
+Source0:        https://github.com/requests/requests/archive/v%{version}/requests-v%{version}.tar.gz
 # Explicitly use the system certificates in ca-certificates.
 # https://bugzilla.redhat.com/show_bug.cgi?id=904614
-Patch0:         python-requests-system-cert-bundle.patch
+Patch0:         patch-requests-certs.py-to-use-the-system-CA-bundle.patch
 
 # Remove an unnecessary reference to a bundled compat lib in urllib3
 # Some discussion with upstream:
 # - https://twitter.com/sigmavirus24/status/529816751651819520
 # - https://github.com/kennethreitz/requests/issues/1811
 # - https://github.com/kennethreitz/requests/pull/1812
-Patch1:         python-requests-remove-nested-bundling-dep.patch
+Patch1:         dont-import-OrderedDict-from-urllib3.patch
 
-# Tell setuptools about what version of urllib3 we're unbundling
-# - https://github.com/kennethreitz/requests/issues/2816
-Patch2:         python-requests-urllib3-at-%{urllib3_unbundled_version}.patch
+
+# https://bugzilla.redhat.com/show_bug.cgi?id=1450608
+Patch2:         Remove-tests-that-use-the-tarpit.patch
 
 # Use 127.0.0.1 not localhost for socket.bind() in the Server test
 # class, to fix tests in Koji's no-network environment
@@ -53,7 +51,7 @@ Summary: HTTP library, written in Python, for human beings
 
 BuildRequires:  python2-devel
 BuildRequires:  python-chardet
-BuildRequires:  python2-urllib3 == %{urllib3_unbundled_version}
+BuildRequires:  python2-urllib3
 # For tests
 BuildRequires:  python2-pytest
 BuildRequires:  python2-pytest-cov
@@ -63,7 +61,7 @@ BuildRequires:  python2-pytest-mock
 
 Requires:       ca-certificates
 Requires:       python-chardet
-Requires:       python2-urllib3 == %{urllib3_unbundled_version}
+Requires:       python2-urllib3
 Requires:       python-idna
 
 %if 0%{?rhel} && 0%{?rhel} <= 6
@@ -85,7 +83,7 @@ Summary: HTTP library, written in Python, for human beings
 
 BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  python%{python3_pkgversion}-chardet
-BuildRequires:  python%{python3_pkgversion}-urllib3 == %{urllib3_unbundled_version}
+BuildRequires:  python%{python3_pkgversion}-urllib3
 # For tests
 BuildRequires:  python%{python3_pkgversion}-pytest
 BuildRequires:  python%{python3_pkgversion}-pytest-cov
@@ -93,7 +91,7 @@ BuildRequires:  python%{python3_pkgversion}-pytest-httpbin
 BuildRequires:  python%{python3_pkgversion}-pytest-mock
 
 Requires:       python%{python3_pkgversion}-chardet
-Requires:       python%{python3_pkgversion}-urllib3 == %{urllib3_unbundled_version}
+Requires:       python%{python3_pkgversion}-urllib3
 Requires:       python%{python3_pkgversion}-idna
 
 %description -n python%{python3_pkgversion}-requests
@@ -119,36 +117,21 @@ cp -a . %{py3dir}
 pushd %{py3dir}
 %{__python3} setup.py build
 
-# Unbundle chardet and urllib3.  We replace these with symlinks to system libs.
-rm -rf build/lib/requests/packages/chardet
-rm -rf build/lib/requests/packages/urllib3
-rm -rf build/lib/requests/packages/idna
-
 popd
 %endif
 
 %{__python} setup.py build
 
-# Unbundle chardet and urllib3.  We replace these with symlinks to system libs.
-rm -rf build/lib/requests/packages/chardet
-rm -rf build/lib/requests/packages/urllib3
-rm -rf build/lib/requests/packages/idna
 
 %install
 rm -rf $RPM_BUILD_ROOT
 %if 0%{?_with_python3}
 pushd %{py3dir}
 %{__python3} setup.py install --skip-build --root $RPM_BUILD_ROOT
-ln -s ../../chardet %{buildroot}/%{python3_sitelib}/requests/packages/chardet
-ln -s ../../urllib3 %{buildroot}/%{python3_sitelib}/requests/packages/urllib3
-ln -s ../../idna %{buildroot}/%{python3_sitelib}/requests/packages/idna
 popd
 %endif
 
 %{__python} setup.py install --skip-build --root $RPM_BUILD_ROOT
-ln -s ../../chardet %{buildroot}/%{python2_sitelib}/requests/packages/chardet
-ln -s ../../urllib3 %{buildroot}/%{python2_sitelib}/requests/packages/urllib3
-ln -s ../../idna %{buildroot}/%{python2_sitelib}/requests/packages/idna
 
 %check
 
@@ -168,7 +151,7 @@ popd
 %defattr(-,root,root,-)
 %{!?_licensedir:%global license %%doc}
 %license LICENSE
-%doc NOTICE README.rst HISTORY.rst
+%doc README.rst HISTORY.rst
 %{python2_sitelib}/*.egg-info
 %dir %{python2_sitelib}/requests
 %{python2_sitelib}/requests/*
@@ -177,12 +160,16 @@ popd
 %files -n python%{python3_pkgversion}-requests
 %{!?_licensedir:%global license %%doc}
 %license LICENSE
-%doc NOTICE README.rst HISTORY.rst
+%doc README.rst HISTORY.rst
 %{python3_sitelib}/*.egg-info
 %{python3_sitelib}/requests/
 %endif
 
 %changelog
+* Mon Jun 19 2017 Jeremy Cline <jeremy@jcline.org> - 2.18.1-1
+- Update to 2.18.1 (#1449432)
+- Remove tests that require non-local network (#1450608)
+
 * Wed May 17 2017 Jeremy Cline <jeremy@jcline.org> - 2.14.2-1
 - Update to 2.14.2 (#1449432)
 - Switch to autosetup to apply patches
