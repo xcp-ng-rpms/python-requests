@@ -9,7 +9,7 @@
 
 Name:           python-requests
 Version:        2.18.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -166,6 +166,9 @@ popd
 %endif
 
 %changelog
+* Tue Jun 20 2017 Jeremy Cline <jeremy@jcline.org> - 2.18.1-2
+- Drop the dependency on certifi in setup.py
+
 * Mon Jun 19 2017 Jeremy Cline <jeremy@jcline.org> - 2.18.1-1
 - Update to 2.18.1 (#1449432)
 - Remove tests that require non-local network (#1450608)
