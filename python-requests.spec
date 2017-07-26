@@ -8,8 +8,8 @@
 %endif
 
 Name:           python-requests
-Version:        2.18.1
-Release:        2%{?dist}
+Version:        2.18.2
+Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -166,6 +166,9 @@ popd
 %endif
 
 %changelog
+* Wed Jul 26 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 2.18.2-1
+- Update to 2.18.2
+
 * Tue Jun 20 2017 Jeremy Cline <jeremy@jcline.org> - 2.18.1-2
 - Drop the dependency on certifi in setup.py
 
