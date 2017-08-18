@@ -8,7 +8,7 @@
 %endif
 
 Name:           python-requests
-Version:        2.18.2
+Version:        2.18.4
 Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
@@ -166,6 +166,9 @@ popd
 %endif
 
 %changelog
+* Fri Aug 18 2017 Jeremy Cline <jeremy@jcline.org> - 2.18.4-1
+- Update to 2.18.4
+
 * Wed Jul 26 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 2.18.2-1
 - Update to 2.18.2
 
