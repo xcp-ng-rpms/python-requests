@@ -9,7 +9,7 @@
 
 Name:           python-requests
 Version:        2.18.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -50,7 +50,7 @@ Summary: HTTP library, written in Python, for human beings
 %{?python_provide:%python_provide python2-requests}
 
 BuildRequires:  python2-devel
-BuildRequires:  python-chardet
+BuildRequires:  python2-chardet
 BuildRequires:  python2-urllib3
 # For tests
 BuildRequires:  python2-pytest
@@ -60,9 +60,9 @@ BuildRequires:  python2-pytest-mock
 
 
 Requires:       ca-certificates
-Requires:       python-chardet
+Requires:       python2-chardet
 Requires:       python2-urllib3
-Requires:       python-idna
+Requires:       python2-idna
 
 %if 0%{?rhel} && 0%{?rhel} <= 6
 BuildRequires:  python-ordereddict
@@ -166,6 +166,10 @@ popd
 %endif
 
 %changelog
+* Mon Dec 11 2017 Iryna Shcherbina <ishcherb@redhat.com> - 2.18.4-2
+- Fix ambiguous Python 2 dependency declarations
+  (See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3)
+
 * Fri Aug 18 2017 Jeremy Cline <jeremy@jcline.org> - 2.18.4-1
 - Update to 2.18.4
 
