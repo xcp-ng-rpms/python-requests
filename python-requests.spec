@@ -9,7 +9,7 @@
 
 Name:           python-requests
 Version:        2.18.4
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -166,6 +166,9 @@ popd
 %endif
 
 %changelog
+* Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 2.18.4-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
 * Mon Dec 11 2017 Iryna Shcherbina <ishcherb@redhat.com> - 2.18.4-2
 - Fix ambiguous Python 2 dependency declarations
   (See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3)
