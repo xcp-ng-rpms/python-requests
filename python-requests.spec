@@ -9,7 +9,7 @@
 
 Name:           python-requests
 Version:        2.18.4
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -36,6 +36,9 @@ Patch2:         Remove-tests-that-use-the-tarpit.patch
 # could technically be IPv6 or something, and our no-network env is
 # a pretty odd one so this is a niche requirement.
 Patch3:         requests-2.12.4-tests_nonet.patch
+
+# https://bugzilla.redhat.com/show_bug.cgi?id=1567862
+Patch4:         Don-t-inject-pyopenssl-into-urllib3.patch
 
 BuildArch:      noarch
 
@@ -166,6 +169,9 @@ popd
 %endif
 
 %changelog
+* Mon Apr 16 2018 Jeremy Cline <jeremy@jcline.org> - 2.18.4-4
+- Stop injecting PyOpenSSL (rhbz 1567862)
+
 * Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 2.18.4-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
