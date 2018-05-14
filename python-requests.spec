@@ -7,6 +7,16 @@
 %{!?python3_pkgversion: %global python3_pkgversion 34}
 %endif
 
+%if 0%{?_module_build}
+# Don't run tests on module-build for now
+# See: https://bugzilla.redhat.com/show_bug.cgi?id=1450608
+%bcond_with tests
+%else
+# When bootstrapping Python, we cannot test this yet
+%bcond_without tests
+%endif
+
+
 Name:           python-requests
 Version:        2.18.4
 Release:        4%{?dist}
@@ -55,11 +65,12 @@ Summary: HTTP library, written in Python, for human beings
 BuildRequires:  python2-devel
 BuildRequires:  python2-chardet
 BuildRequires:  python2-urllib3
-# For tests
+%if %{with tests}
 BuildRequires:  python2-pytest
 BuildRequires:  python2-pytest-cov
 BuildRequires:  python2-pytest-httpbin
 BuildRequires:  python2-pytest-mock
+%endif
 
 
 Requires:       ca-certificates
@@ -87,11 +98,12 @@ Summary: HTTP library, written in Python, for human beings
 BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  python%{python3_pkgversion}-chardet
 BuildRequires:  python%{python3_pkgversion}-urllib3
-# For tests
+%if %{with tests}
 BuildRequires:  python%{python3_pkgversion}-pytest
 BuildRequires:  python%{python3_pkgversion}-pytest-cov
 BuildRequires:  python%{python3_pkgversion}-pytest-httpbin
 BuildRequires:  python%{python3_pkgversion}-pytest-mock
+%endif
 
 Requires:       python%{python3_pkgversion}-chardet
 Requires:       python%{python3_pkgversion}-urllib3
@@ -136,18 +148,16 @@ popd
 
 %{__python} setup.py install --skip-build --root $RPM_BUILD_ROOT
 
-%check
 
-%if ! 0%{?_module_build}
-# Don't run tests on module-build for now
-# See: https://bugzilla.redhat.com/show_bug.cgi?id=1450608
+%if %{with tests}
+%check
 PYTHONPATH=./ py.test
 %if 0%{?_with_python3}
 pushd %{py3dir}
 PYTHONPATH=./ py.test-%{python3_pkgversion}
 popd
 %endif
-%endif #_module_build
+%endif # tests
 
 
 %files -n python2-requests
