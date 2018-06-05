@@ -1,12 +1,3 @@
-%global _with_python3 1
-%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print (get_python_lib())")}
-
-%if 0%{?fedora}
-%{!?python3_pkgversion: %global python3_pkgversion 3}
-%else
-%{!?python3_pkgversion: %global python3_pkgversion 34}
-%endif
-
 %if 0%{?_module_build}
 # Don't run tests on module-build for now
 # See: https://bugzilla.redhat.com/show_bug.cgi?id=1450608
@@ -90,7 +81,6 @@ cumbersome. Python’s built-in urllib2 module provides most of the HTTP
 capabilities you should need, but the API is thoroughly broken. This library is
 designed to make HTTP requests easy for developers.
 
-%if 0%{?_with_python3}
 %package -n python%{python3_pkgversion}-requests
 Summary: HTTP library, written in Python, for human beings
 
@@ -116,7 +106,6 @@ Most existing Python modules for sending HTTP requests are extremely verbose and
 cumbersome. Python’s built-in urllib2 module provides most of the HTTP
 capabilities you should need, but the API is thoroughly broken. This library is
 designed to make HTTP requests easy for developers.
-%endif
 
 %prep
 %autosetup -p1 -n requests-%{version}
@@ -124,61 +113,35 @@ designed to make HTTP requests easy for developers.
 # Unbundle the certificate bundle from mozilla.
 rm -rf requests/cacert.pem
 
-%if 0%{?_with_python3}
-rm -rf %{py3dir}
-cp -a . %{py3dir}
-%endif # with_python3
-
 %build
-%if 0%{?_with_python3}
-pushd %{py3dir}
-%{__python3} setup.py build
-
-popd
-%endif
-
-%{__python} setup.py build
+%py2_build
+%py3_build
 
 
 %install
-rm -rf $RPM_BUILD_ROOT
-%if 0%{?_with_python3}
-pushd %{py3dir}
-%{__python3} setup.py install --skip-build --root $RPM_BUILD_ROOT
-popd
-%endif
-
-%{__python} setup.py install --skip-build --root $RPM_BUILD_ROOT
+%py2_install
+%py3_install
 
 
 %if %{with tests}
 %check
-PYTHONPATH=./ py.test
-%if 0%{?_with_python3}
-pushd %{py3dir}
-PYTHONPATH=./ py.test-%{python3_pkgversion}
-popd
-%endif
+PYTHONPATH=%{buildroot}%{python2_sitelib} %{__python2} -m pytest -v
+PYTHONPATH=%{buildroot}%{python3_sitelib} %{__python3} -m pytest -v
 %endif # tests
 
 
 %files -n python2-requests
-%defattr(-,root,root,-)
-%{!?_licensedir:%global license %%doc}
 %license LICENSE
 %doc README.rst HISTORY.rst
 %{python2_sitelib}/*.egg-info
-%dir %{python2_sitelib}/requests
-%{python2_sitelib}/requests/*
+%{python2_sitelib}/requests/
 
-%if 0%{?_with_python3}
 %files -n python%{python3_pkgversion}-requests
-%{!?_licensedir:%global license %%doc}
 %license LICENSE
 %doc README.rst HISTORY.rst
 %{python3_sitelib}/*.egg-info
 %{python3_sitelib}/requests/
-%endif
+
 
 %changelog
 * Mon Apr 16 2018 Jeremy Cline <jeremy@jcline.org> - 2.18.4-4
