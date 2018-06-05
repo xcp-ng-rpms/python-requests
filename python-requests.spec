@@ -65,6 +65,7 @@ Summary: HTTP library, written in Python, for human beings
 BuildRequires:  python2-devel
 BuildRequires:  python2-chardet
 BuildRequires:  python2-urllib3
+BuildRequires:  python2-idna
 %if %{with tests}
 BuildRequires:  python2-pytest
 BuildRequires:  python2-pytest-cov
@@ -98,6 +99,7 @@ Summary: HTTP library, written in Python, for human beings
 BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  python%{python3_pkgversion}-chardet
 BuildRequires:  python%{python3_pkgversion}-urllib3
+BuildRequires:  python%{python3_pkgversion}-idna
 %if %{with tests}
 BuildRequires:  python%{python3_pkgversion}-pytest
 BuildRequires:  python%{python3_pkgversion}-pytest-cov
