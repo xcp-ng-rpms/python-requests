@@ -113,6 +113,9 @@ designed to make HTTP requests easy for developers.
 # Unbundle the certificate bundle from mozilla.
 rm -rf requests/cacert.pem
 
+# env shebang in nonexecutable file
+sed -i '/#!\/usr\/.*python/d' requests/certs.py
+
 %build
 %py2_build
 %py3_build
