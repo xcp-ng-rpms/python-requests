@@ -1,0 +1,27 @@
+From 7147b3e8280d2ae245b28e9f6ede1d9210af79ef Mon Sep 17 00:00:00 2001
+From: Jeremy Cline <jcline@redhat.com>
+Date: Tue, 5 Jun 2018 23:00:42 -0400
+Subject: [PATCH] Allow urllib3-1.23
+
+Signed-off-by: Jeremy Cline <jcline@redhat.com>
+---
+ setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index ed4892d4..e113510c 100755
+--- a/setup.py
++++ b/setup.py
+@@ -44,7 +44,7 @@ packages = ['requests']
+ requires = [
+     'chardet>=3.0.2,<3.1.0',
+     'idna>=2.5,<2.7',
+-    'urllib3>=1.21.1,<1.23',
++    'urllib3>=1.21.1,<1.24',
+
+ ]
+ test_requirements = ['pytest-httpbin==0.0.7', 'pytest-cov', 'pytest-mock', 'pytest-xdist', 'PySocks>=1.5.6, !=1.5.7', 'pytest>=2.8.0']
+
+-- 
+2.17.1
+

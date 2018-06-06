@@ -10,7 +10,7 @@
 
 Name:           python-requests
 Version:        2.18.4
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -40,6 +40,8 @@ Patch3:         requests-2.12.4-tests_nonet.patch
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=1567862
 Patch4:         Don-t-inject-pyopenssl-into-urllib3.patch
+
+Patch5:         Allow-urllib3-1.23.patch
 
 BuildArch:      noarch
 
@@ -147,6 +149,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} %{__python3} -m pytest -v
 
 
 %changelog
+* Tue Jun 05 2018 Jeremy Cline <jeremy@jcline.org> - 2.18.4-5
+- Allow urllib3 v1.23 (rhbz 1586311)
+
 * Mon Apr 16 2018 Jeremy Cline <jeremy@jcline.org> - 2.18.4-4
 - Stop injecting PyOpenSSL (rhbz 1567862)
 
