@@ -1,29 +1,28 @@
-From 75f027ac8bc55ad280f7bf72a25db1ce8c1fc76d Mon Sep 17 00:00:00 2001
-From: Jeremy Cline <jeremy@jcline.org>
-Date: Mon, 19 Jun 2017 16:19:53 -0400
+From 152550287d6538e5cc7649bcf685a5a0b35058dd Mon Sep 17 00:00:00 2001
+From: Jeremy Cline <jcline@redhat.com>
+Date: Tue, 12 Jun 2018 14:06:00 -0400
 Subject: [PATCH] Don't import OrderedDict from urllib3
 
-Signed-off-by: Jeremy Cline <jeremy@jcline.org>
+We unbundle urllib3, just use collections (py2.7+)
+
+Signed-off-by: Jeremy Cline <jcline@redhat.com>
 ---
- requests/compat.py | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ requests/compat.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/requests/compat.py b/requests/compat.py
-index 5c09ea8..61fa0c8 100644
+index 6b9c6fac..6ba6e460 100644
 --- a/requests/compat.py
 +++ b/requests/compat.py
-@@ -46,7 +46,10 @@ if is_py2:
-     from Cookie import Morsel
+@@ -45,7 +45,7 @@ if is_py2:
      from StringIO import StringIO
+     from collections import Callable, Mapping, MutableMapping
  
 -    from urllib3.packages.ordered_dict import OrderedDict
-+    try:
-+        from collections import OrderedDict  # py2.7+
-+    except:
-+        from ordereddict import OrderedDict  # py2.6 and lower (el6, etc.
++    from collections import OrderedDict  # py2.7+
  
      builtin_str = str
      bytes = str
 -- 
-2.9.4
+2.17.1
 

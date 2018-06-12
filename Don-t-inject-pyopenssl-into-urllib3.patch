@@ -12,10 +12,10 @@ Signed-off-by: Jeremy Cline <jeremy@jcline.org>
  1 file changed, 7 deletions(-)
 
 diff --git a/requests/__init__.py b/requests/__init__.py
-index 268e7dcc..45b2c679 100644
+index a5b3c9c3..e312d314 100644
 --- a/requests/__init__.py
 +++ b/requests/__init__.py
-@@ -79,13 +79,6 @@ except (AssertionError, ValueError):
+@@ -90,17 +90,6 @@ except (AssertionError, ValueError):
                    "version!".format(urllib3.__version__, chardet.__version__),
                    RequestsDependencyWarning)
  
@@ -23,6 +23,10 @@ index 268e7dcc..45b2c679 100644
 -try:
 -    from urllib3.contrib import pyopenssl
 -    pyopenssl.inject_into_urllib3()
+-
+-    # Check cryptography version
+-    from cryptography import __version__ as cryptography_version
+-    _check_cryptography(cryptography_version)
 -except ImportError:
 -    pass
 -
