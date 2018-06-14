@@ -1,3 +1,4 @@
+%global _without_tests 1
 %if 0%{?_module_build}
 # Don't run tests on module-build for now
 # See: https://bugzilla.redhat.com/show_bug.cgi?id=1450608
@@ -10,7 +11,7 @@
 
 Name:           python-requests
 Version:        2.19.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -147,6 +148,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} %{__python3} -m pytest -v
 
 
 %changelog
+* Thu Jun 14 2018 Miro Hrončok <mhroncok@redhat.com> - 2.19.0-2
+- Bootstrap for Python 3.7
+
 * Tue Jun 12 2018 Jeremy Cline <jeremy@jcline.org> - 2.19.0-1
 - Update to v2.19.0 (rhbz 1590508)
 
