@@ -10,8 +10,8 @@
 
 
 Name:           python-requests
-Version:        2.19.0
-Release:        2%{?dist}
+Version:        2.19.1
+Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -148,6 +148,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} %{__python3} -m pytest -v
 
 
 %changelog
+* Thu Jun 14 2018 Jeremy Cline <jeremy@jcline.org> - 2.19.1-1
+- Update to v2.19.1 (rhbz 1591531)
+
 * Thu Jun 14 2018 Miro Hrončok <mhroncok@redhat.com> - 2.19.0-2
 - Bootstrap for Python 3.7
 
