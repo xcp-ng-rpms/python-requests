@@ -1,4 +1,4 @@
-From fd9ab446d8479360d2c1c8252508d97d58ed3e0e Mon Sep 17 00:00:00 2001
+From a8ef690988f92a56226f8b688f1a3638346bca8e Mon Sep 17 00:00:00 2001
 From: Jeremy Cline <jeremy@jcline.org>
 Date: Mon, 19 Jun 2017 16:09:02 -0400
 Subject: [PATCH] Patch requests/certs.py to use the system CA bundle
@@ -10,7 +10,7 @@ Signed-off-by: Jeremy Cline <jeremy@jcline.org>
  2 files changed, 10 insertions(+), 2 deletions(-)
 
 diff --git a/requests/certs.py b/requests/certs.py
-index d1a378d..7b103ba 100644
+index d1a378d7..7b103baf 100644
 --- a/requests/certs.py
 +++ b/requests/certs.py
 @@ -11,8 +11,17 @@ only one — the one from the certifi package.
@@ -33,17 +33,17 @@ index d1a378d..7b103ba 100644
  if __name__ == '__main__':
      print(where())
 diff --git a/setup.py b/setup.py
-index 93a8507..2db9569 100755
+index 4e2ad936..60de5861 100755
 --- a/setup.py
 +++ b/setup.py
 @@ -45,7 +45,6 @@ requires = [
      'chardet>=3.0.2,<3.1.0',
      'idna>=2.5,<2.8',
-     'urllib3>=1.21.1,<1.24',
+     'urllib3>=1.21.1,<1.25',
 -    'certifi>=2017.4.17'
  
  ]
- test_requirements = ['pytest-httpbin==0.0.7', 'pytest-cov', 'pytest-mock', 'pytest-xdist', 'PySocks>=1.5.6, !=1.5.7', 'pytest>=2.8.0']
+ test_requirements = [
 -- 
-2.9.4
+2.19.1
 

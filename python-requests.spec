@@ -9,8 +9,8 @@
 
 
 Name:           python-requests
-Version:        2.19.1
-Release:        3%{?dist}
+Version:        2.20.0
+Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -19,14 +19,6 @@ Source0:        https://github.com/requests/requests/archive/v%{version}/request
 # Explicitly use the system certificates in ca-certificates.
 # https://bugzilla.redhat.com/show_bug.cgi?id=904614
 Patch0:         patch-requests-certs.py-to-use-the-system-CA-bundle.patch
-
-# Remove an unnecessary reference to a bundled compat lib in urllib3
-# Some discussion with upstream:
-# - https://twitter.com/sigmavirus24/status/529816751651819520
-# - https://github.com/kennethreitz/requests/issues/1811
-# - https://github.com/kennethreitz/requests/pull/1812
-Patch1:         dont-import-OrderedDict-from-urllib3.patch
-
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=1450608
 Patch2:         Remove-tests-that-use-the-tarpit.patch
@@ -135,18 +127,21 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} %{__python3} -m pytest -v
 
 %files -n python2-requests
 %license LICENSE
-%doc README.rst HISTORY.rst
+%doc README.md HISTORY.md
 %{python2_sitelib}/*.egg-info
 %{python2_sitelib}/requests/
 
 %files -n python%{python3_pkgversion}-requests
 %license LICENSE
-%doc README.rst HISTORY.rst
+%doc README.md HISTORY.md
 %{python3_sitelib}/*.egg-info
 %{python3_sitelib}/requests/
 
 
 %changelog
+* Mon Oct 29 2018 Jeremy Cline <jeremy@jcline.org> - 2.20.0-1
+- Update to v2.20.0
+
 * Sat Jul 14 2018 Fedora Release Engineering <releng@fedoraproject.org> - 2.19.1-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
