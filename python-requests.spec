@@ -10,7 +10,7 @@
 
 Name:           python-requests
 Version:        2.20.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -33,6 +33,9 @@ Patch3:         requests-2.12.4-tests_nonet.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=1567862
 Patch4:         Don-t-inject-pyopenssl-into-urllib3.patch
 
+# https://bugzilla.redhat.com/show_bug.cgi?id=1653223
+Patch5:         requests-2.20.0-no-py2-httpbin.patch
+
 BuildArch:      noarch
 
 %description
@@ -52,7 +55,6 @@ BuildRequires:  python2-idna
 %if %{with tests}
 BuildRequires:  python2-pytest
 BuildRequires:  python2-pytest-cov
-BuildRequires:  python2-pytest-httpbin
 BuildRequires:  python2-pytest-mock
 %endif
 
@@ -139,6 +141,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} %{__python3} -m pytest -v
 
 
 %changelog
+* Mon Nov 26 2018 Miro Hrončok <mhroncok@redhat.com> - 2.20.0-2
+- No pytest-httpbin for Python 2
+
 * Mon Oct 29 2018 Jeremy Cline <jeremy@jcline.org> - 2.20.0-1
 - Update to v2.20.0
 
