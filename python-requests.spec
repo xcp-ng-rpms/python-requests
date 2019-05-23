@@ -36,6 +36,9 @@ Patch4:         Don-t-inject-pyopenssl-into-urllib3.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=1653223
 Patch5:         requests-2.20.0-no-py2-httpbin.patch
 
+# https://github.com/kennethreitz/requests/pull/5049
+Patch6:         support-pytest-4.patch
+
 BuildArch:      noarch
 
 %description
