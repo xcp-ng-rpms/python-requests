@@ -10,7 +10,7 @@
 
 Name:           python-requests
 Version:        2.22.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -63,8 +63,8 @@ BuildRequires:  python2-pytest-mock
 
 
 Requires:       ca-certificates
-Requires:       python2-chardet
-Requires:       python2-urllib3
+Requires:       python2-chardet >= 3.0.2
+Requires:       python2-urllib3 >= 1.21.1
 Requires:       python2-idna
 
 %if 0%{?rhel} && 0%{?rhel} <= 6
@@ -94,8 +94,8 @@ BuildRequires:  python%{python3_pkgversion}-pytest-httpbin
 BuildRequires:  python%{python3_pkgversion}-pytest-mock
 %endif
 
-Requires:       python%{python3_pkgversion}-chardet
-Requires:       python%{python3_pkgversion}-urllib3
+Requires:       python%{python3_pkgversion}-chardet >= 3.0.2
+Requires:       python%{python3_pkgversion}-urllib3 >= 1.21.1
 Requires:       python%{python3_pkgversion}-idna
 
 %description -n python%{python3_pkgversion}-requests
@@ -144,6 +144,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} %{__python3} -m pytest -v
 
 
 %changelog
+* Tue Jun 11 2019 Yatin Karel <ykarel@redhat.com> - 2.22.0-2
+- Add minimum requirement for chardet and urllib3
+
 * Thu May 23 2019 Jeremy Cline <jcline@redhat.com> - 2.22.0-1
 - Update to v2.22.0
 
