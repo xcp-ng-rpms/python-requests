@@ -1,4 +1,3 @@
-%global _without_tests 1
 %if 0%{?_module_build}
 # Don't run tests on module-build for now
 # See: https://bugzilla.redhat.com/show_bug.cgi?id=1450608
@@ -11,7 +10,7 @@
 
 Name:           python-requests
 Version:        2.22.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -145,6 +144,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} %{__python3} -m pytest -v
 
 
 %changelog
+* Mon Aug 19 2019 Miro Hrončok <mhroncok@redhat.com> - 2.22.0-5
+- Rebuilt for Python 3.8
+
 * Thu Aug 15 2019 Miro Hrončok <mhroncok@redhat.com> - 2.22.0-4
 - Bootstrap for Python 3.8
 
