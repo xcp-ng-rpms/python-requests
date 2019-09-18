@@ -10,7 +10,7 @@
 
 Name:           python-requests
 Version:        2.22.0
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -55,11 +55,6 @@ BuildRequires:  python2-devel
 BuildRequires:  python2-chardet
 BuildRequires:  python2-urllib3
 BuildRequires:  python2-idna
-%if %{with tests}
-BuildRequires:  python2-pytest
-BuildRequires:  python2-pytest-cov
-BuildRequires:  python2-pytest-mock
-%endif
 
 
 Requires:       ca-certificates
@@ -125,7 +120,6 @@ sed -i '/#!\/usr\/.*python/d' requests/certs.py
 
 %if %{with tests}
 %check
-PYTHONPATH=%{buildroot}%{python2_sitelib} %{__python2} -m pytest -v
 PYTHONPATH=%{buildroot}%{python3_sitelib} %{__python3} -m pytest -v
 %endif # tests
 
@@ -144,6 +138,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} %{__python3} -m pytest -v
 
 
 %changelog
+* Wed Sep 18 2019 Petr Viktorin <pviktori@redhat.com> - 2.22.0-6
+- Python 2: Remove tests and test dependencies
+
 * Mon Aug 19 2019 Miro Hrončok <mhroncok@redhat.com> - 2.22.0-5
 - Rebuilt for Python 3.8
 
