@@ -10,7 +10,7 @@
 
 Name:           python-requests
 Version:        2.22.0
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -42,32 +42,6 @@ Patch6:         support-pytest-4.patch
 BuildArch:      noarch
 
 %description
-Most existing Python modules for sending HTTP requests are extremely verbose and
-cumbersome. Python’s built-in urllib2 module provides most of the HTTP
-capabilities you should need, but the API is thoroughly broken. This library is
-designed to make HTTP requests easy for developers.
-
-%package -n python2-requests
-Summary: HTTP library, written in Python, for human beings
-%{?python_provide:%python_provide python2-requests}
-
-BuildRequires:  python2-devel
-BuildRequires:  python2-chardet
-BuildRequires:  python2-urllib3
-BuildRequires:  python2-idna
-
-
-Requires:       ca-certificates
-Requires:       python2-chardet >= 3.0.2
-Requires:       python2-urllib3 >= 1.21.1
-Requires:       python2-idna
-
-%if 0%{?rhel} && 0%{?rhel} <= 6
-BuildRequires:  python-ordereddict
-Requires:       python-ordereddict
-%endif
-
-%description -n python2-requests
 Most existing Python modules for sending HTTP requests are extremely verbose and
 cumbersome. Python’s built-in urllib2 module provides most of the HTTP
 capabilities you should need, but the API is thoroughly broken. This library is
@@ -109,12 +83,10 @@ rm -rf requests/cacert.pem
 sed -i '/#!\/usr\/.*python/d' requests/certs.py
 
 %build
-%py2_build
 %py3_build
 
 
 %install
-%py2_install
 %py3_install
 
 
@@ -122,13 +94,6 @@ sed -i '/#!\/usr\/.*python/d' requests/certs.py
 %check
 PYTHONPATH=%{buildroot}%{python3_sitelib} %{__python3} -m pytest -v
 %endif # tests
-
-
-%files -n python2-requests
-%license LICENSE
-%doc README.md HISTORY.md
-%{python2_sitelib}/*.egg-info
-%{python2_sitelib}/requests/
 
 %files -n python%{python3_pkgversion}-requests
 %license LICENSE
@@ -138,6 +103,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} %{__python3} -m pytest -v
 
 
 %changelog
+* Tue Oct 22 2019 Charalampos Stratakis <cstratak@redhat.com> - 2.22.0-7
+- Remove the python2 subpackage (rhbz#1761787)
+
 * Wed Sep 18 2019 Petr Viktorin <pviktori@redhat.com> - 2.22.0-6
 - Python 2: Remove tests and test dependencies
 
