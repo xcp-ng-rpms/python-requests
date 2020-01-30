@@ -10,7 +10,7 @@
 
 Name:           python-requests
 Version:        2.22.0
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -103,6 +103,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} %{__python3} -m pytest -v
 
 
 %changelog
+* Thu Jan 30 2020 Fedora Release Engineering <releng@fedoraproject.org> - 2.22.0-8
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
+
 * Tue Oct 22 2019 Charalampos Stratakis <cstratak@redhat.com> - 2.22.0-7
 - Remove the python2 subpackage (rhbz#1761787)
 
