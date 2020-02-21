@@ -1,4 +1,4 @@
-From d5a4f2908fab5ca16eb59db8b18eda7a94a37b04 Mon Sep 17 00:00:00 2001
+From aad5590d5ea47dc54cfd97da54f2640014f7d39d Mon Sep 17 00:00:00 2001
 From: Jeremy Cline <jcline@redhat.com>
 Date: Thu, 13 Dec 2018 10:55:29 -0500
 Subject: [PATCH] Patch requests/certs.py to use the system CA bundle
@@ -30,17 +30,17 @@ index d1a378d7..5eb2f1a9 100644
  if __name__ == '__main__':
      print(where())
 diff --git a/setup.py b/setup.py
-index 10ce2c62..1f3b2bde 100755
+index 2da9ba07..851d9a42 100755
 --- a/setup.py
 +++ b/setup.py
 @@ -45,7 +45,6 @@ requires = [
-     'chardet>=3.0.2,<3.1.0',
-     'idna>=2.5,<2.9',
+     'chardet>=3.0.2,<4',
+     'idna>=2.5,<3',
      'urllib3>=1.21.1,<1.26,!=1.25.0,!=1.25.1',
 -    'certifi>=2017.4.17'
  
  ]
  test_requirements = [
 -- 
-2.19.2
+2.24.1
 

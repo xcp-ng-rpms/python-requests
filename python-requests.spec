@@ -9,8 +9,8 @@
 
 
 Name:           python-requests
-Version:        2.22.0
-Release:        8%{?dist}
+Version:        2.23.0
+Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -36,9 +36,6 @@ Patch4:         Don-t-inject-pyopenssl-into-urllib3.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=1653223
 Patch5:         requests-2.20.0-no-py2-httpbin.patch
 
-# https://github.com/kennethreitz/requests/pull/5049
-Patch6:         support-pytest-4.patch
-
 BuildArch:      noarch
 
 %description
@@ -56,6 +53,7 @@ BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  python%{python3_pkgversion}-chardet
 BuildRequires:  python%{python3_pkgversion}-urllib3
 BuildRequires:  python%{python3_pkgversion}-idna
+BuildRequires:  python%{python3_pkgversion}-pygments
 %if %{with tests}
 BuildRequires:  python%{python3_pkgversion}-pytest
 BuildRequires:  python%{python3_pkgversion}-pytest-cov
@@ -82,6 +80,11 @@ rm -rf requests/cacert.pem
 # env shebang in nonexecutable file
 sed -i '/#!\/usr\/.*python/d' requests/certs.py
 
+# Some doctests use the internet and fail to pass in Koji. Since doctests don't have names, I don't
+# know a way to skip them. We also don't want to patch them out, because patching them out will
+# change the docs. Thus, we set pytest not to run doctests at all.
+sed -i 's/ --doctest-modules//' pytest.ini
+
 %build
 %py3_build
 
@@ -103,6 +106,10 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} %{__python3} -m pytest -v
 
 
 %changelog
+* Fri Feb 21 2020 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.23.0-1
+- Update to 2.23.0 (#1804863).
+- https://requests.readthedocs.io/en/latest/community/updates/
+
 * Thu Jan 30 2020 Fedora Release Engineering <releng@fedoraproject.org> - 2.22.0-8
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 
