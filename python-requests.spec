@@ -10,7 +10,7 @@
 
 Name:           python-requests
 Version:        2.23.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -50,20 +50,19 @@ Summary: HTTP library, written in Python, for human beings
 %{?python_provide:%python_provide python%{python3_pkgversion}-requests}
 
 BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-chardet
-BuildRequires:  python%{python3_pkgversion}-urllib3
-BuildRequires:  python%{python3_pkgversion}-idna
-BuildRequires:  python%{python3_pkgversion}-pygments
+BuildRequires:  python3dist(chardet)
+BuildRequires:  python3dist(urllib3)
+BuildRequires:  python3dist(idna)
+BuildRequires:  python3dist(pygments)
+BuildRequires:  python3dist(setuptools)
 %if %{with tests}
-BuildRequires:  python%{python3_pkgversion}-pytest
-BuildRequires:  python%{python3_pkgversion}-pytest-cov
-BuildRequires:  python%{python3_pkgversion}-pytest-httpbin
-BuildRequires:  python%{python3_pkgversion}-pytest-mock
+# https://github.com/psf/requests/issues/5304 (fixed in master)
+BuildRequires:  python3dist(pytest) < 5
+BuildRequires:  python3dist(pytest-cov)
+BuildRequires:  python3dist(pytest-httpbin)
+BuildRequires:  python3dist(pytest-mock)
 %endif
 
-Requires:       python%{python3_pkgversion}-chardet >= 3.0.2
-Requires:       python%{python3_pkgversion}-urllib3 >= 1.21.1
-Requires:       python%{python3_pkgversion}-idna
 
 %description -n python%{python3_pkgversion}-requests
 Most existing Python modules for sending HTTP requests are extremely verbose and
@@ -101,11 +100,14 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} %{__python3} -m pytest -v
 %files -n python%{python3_pkgversion}-requests
 %license LICENSE
 %doc README.md HISTORY.md
-%{python3_sitelib}/*.egg-info
+%{python3_sitelib}/*.egg-info/
 %{python3_sitelib}/requests/
 
 
 %changelog
+* Sat May 30 2020 Miro Hrončok <mhroncok@redhat.com> - 2.23.0-4
+- Test with pytest 4, drop manual requires
+
 * Mon May 25 2020 Miro Hrončok <mhroncok@redhat.com> - 2.23.0-3
 - Rebuilt for Python 3.9
 
