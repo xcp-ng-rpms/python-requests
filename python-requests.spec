@@ -9,8 +9,8 @@
 
 
 Name:           python-requests
-Version:        2.23.0
-Release:        5%{?dist}
+Version:        2.24.0
+Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -29,12 +29,6 @@ Patch2:         Remove-tests-that-use-the-tarpit.patch
 # could technically be IPv6 or something, and our no-network env is
 # a pretty odd one so this is a niche requirement.
 Patch3:         requests-2.12.4-tests_nonet.patch
-
-# https://bugzilla.redhat.com/show_bug.cgi?id=1567862
-Patch4:         Don-t-inject-pyopenssl-into-urllib3.patch
-
-# https://bugzilla.redhat.com/show_bug.cgi?id=1653223
-Patch5:         requests-2.20.0-no-py2-httpbin.patch
 
 BuildArch:      noarch
 
@@ -108,6 +102,10 @@ sed -i 's/ --doctest-modules//' pytest.ini
 
 
 %changelog
+* Fri Jul 10 2020 Miro Hrončok <mhroncok@redhat.com> - 2.24.0-1
+- Update to 2.24.0
+- Resolves rhbz#1848104
+
 * Fri Jul 10 2020 Miro Hrončok <mhroncok@redhat.com> - 2.23.0-5
 - Add requests[security] and requests[socks] subpackages
 
