@@ -10,7 +10,7 @@
 
 Name:           python-requests
 Version:        2.23.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -70,6 +70,8 @@ cumbersome. Python’s built-in urllib2 module provides most of the HTTP
 capabilities you should need, but the API is thoroughly broken. This library is
 designed to make HTTP requests easy for developers.
 
+%{?python_extras_subpkg:%python_extras_subpkg -n python%{python3_pkgversion}-requests -i %{python3_sitelib}/*.egg-info security socks}
+
 %prep
 %autosetup -p1 -n requests-%{version}
 
@@ -105,6 +107,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} %{__python3} -m pytest -v
 
 
 %changelog
+* Fri Jul 10 2020 Miro Hrončok <mhroncok@redhat.com> - 2.23.0-5
+- Add requests[security] and requests[socks] subpackages
+
 * Sat May 30 2020 Miro Hrončok <mhroncok@redhat.com> - 2.23.0-4
 - Test with pytest 4, drop manual requires
 
