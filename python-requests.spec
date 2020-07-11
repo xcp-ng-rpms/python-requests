@@ -96,7 +96,8 @@ sed -i 's/ --doctest-modules//' pytest.ini
 
 %if %{with tests}
 %check
-PYTHONPATH=%{buildroot}%{python3_sitelib} %{__python3} -m pytest -v
+# test_https_warnings: https://github.com/psf/requests/issues/5530
+%pytest -v -k "not test_https_warnings"
 %endif # tests
 
 %files -n python%{python3_pkgversion}-requests
