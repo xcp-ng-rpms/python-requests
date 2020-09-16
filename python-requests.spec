@@ -10,7 +10,7 @@
 
 Name:           python-requests
 Version:        2.24.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -44,11 +44,8 @@ Summary: HTTP library, written in Python, for human beings
 %{?python_provide:%python_provide python%{python3_pkgversion}-requests}
 
 BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python3dist(chardet)
-BuildRequires:  python3dist(urllib3)
-BuildRequires:  python3dist(idna)
-BuildRequires:  python3dist(pygments)
-BuildRequires:  python3dist(setuptools)
+BuildRequires:  pyproject-rpm-macros
+
 %if %{with tests}
 BuildRequires:  python3dist(pytest)
 BuildRequires:  python3dist(pytest-cov)
@@ -63,7 +60,15 @@ cumbersome. Python’s built-in urllib2 module provides most of the HTTP
 capabilities you should need, but the API is thoroughly broken. This library is
 designed to make HTTP requests easy for developers.
 
-%{?python_extras_subpkg:%python_extras_subpkg -n python%{python3_pkgversion}-requests -i %{python3_sitelib}/*.egg-info security socks}
+%pyproject_extras_subpkg -n python%{python3_pkgversion}-requests security socks
+
+%generate_buildrequires
+%if %{with tests}
+%pyproject_buildrequires -r
+%else
+%pyproject_buildrequires
+%endif
+
 
 %prep
 %autosetup -p1 -n requests-%{version}
@@ -80,11 +85,12 @@ sed -i '/#!\/usr\/.*python/d' requests/certs.py
 sed -i 's/ --doctest-modules//' pytest.ini
 
 %build
-%py3_build
+%pyproject_wheel
 
 
 %install
-%py3_install
+%pyproject_install
+%pyproject_save_files requests
 
 
 %if %{with tests}
@@ -93,14 +99,16 @@ sed -i 's/ --doctest-modules//' pytest.ini
 %pytest -v -k "not test_https_warnings"
 %endif # tests
 
-%files -n python%{python3_pkgversion}-requests
+
+%files -n python%{python3_pkgversion}-requests -f %{pyproject_files}
 %license LICENSE
 %doc README.md HISTORY.md
-%{python3_sitelib}/*.egg-info/
-%{python3_sitelib}/requests/
 
 
 %changelog
+* Fri Sep 18 2020 Petr Viktorin <pviktori@redhat.com> - 2.24.0-4
+- Port to pyproject macros
+
 * Fri Sep 18 2020 Miro Hrončok <mhroncok@redhat.com> - 2.24.0-3
 - Build with pytest 6, older version is no longer required
 
