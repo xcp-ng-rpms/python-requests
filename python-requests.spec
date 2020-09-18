@@ -10,7 +10,7 @@
 
 Name:           python-requests
 Version:        2.24.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -50,8 +50,7 @@ BuildRequires:  python3dist(idna)
 BuildRequires:  python3dist(pygments)
 BuildRequires:  python3dist(setuptools)
 %if %{with tests}
-# https://github.com/psf/requests/issues/5304 (fixed in master)
-BuildRequires:  python3dist(pytest) < 5
+BuildRequires:  python3dist(pytest)
 BuildRequires:  python3dist(pytest-cov)
 BuildRequires:  python3dist(pytest-httpbin)
 BuildRequires:  python3dist(pytest-mock)
@@ -102,6 +101,9 @@ sed -i 's/ --doctest-modules//' pytest.ini
 
 
 %changelog
+* Fri Sep 18 2020 Miro Hrončok <mhroncok@redhat.com> - 2.24.0-3
+- Build with pytest 6, older version is no longer required
+
 * Wed Jul 29 2020 Fedora Release Engineering <releng@fedoraproject.org> - 2.24.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
 
