@@ -10,7 +10,7 @@
 
 Name:           python-requests
 Version:        2.24.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -48,7 +48,6 @@ BuildRequires:  pyproject-rpm-macros
 
 %if %{with tests}
 BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-cov)
 BuildRequires:  python3dist(pytest-httpbin)
 BuildRequires:  python3dist(pytest-mock)
 %endif
@@ -106,6 +105,9 @@ sed -i 's/ --doctest-modules//' pytest.ini
 
 
 %changelog
+* Fri Nov 13 2020 Miro Hrončok <mhroncok@redhat.com> - 2.24.0-5
+- Don't BR pytest-cov
+
 * Fri Sep 18 2020 Petr Viktorin <pviktori@redhat.com> - 2.24.0-4
 - Port to pyproject macros
 
