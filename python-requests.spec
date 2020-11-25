@@ -9,8 +9,8 @@
 
 
 Name:           python-requests
-Version:        2.24.0
-Release:        5%{?dist}
+Version:        2.25.0
+Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -105,6 +105,9 @@ sed -i 's/ --doctest-modules//' pytest.ini
 
 
 %changelog
+* Wed Nov 25 2020 Petr Viktorin <pviktori@redhat.com> - 2.25.0-1
+- Update to 2.25.0
+
 * Fri Nov 13 2020 Miro Hrončok <mhroncok@redhat.com> - 2.24.0-5
 - Don't BR pytest-cov
 
