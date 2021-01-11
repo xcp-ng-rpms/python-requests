@@ -9,8 +9,8 @@
 
 
 Name:           python-requests
-Version:        2.25.0
-Release:        2%{?dist}
+Version:        2.25.1
+Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -96,7 +96,7 @@ sed -i 's/ --doctest-modules//' pytest.ini
 %check
 # test_https_warnings: https://github.com/psf/requests/issues/5530
 %pytest -v -k "not test_https_warnings"
-%endif # tests
+%endif
 
 
 %files -n python%{python3_pkgversion}-requests -f %{pyproject_files}
@@ -105,6 +105,9 @@ sed -i 's/ --doctest-modules//' pytest.ini
 
 
 %changelog
+* Tue Feb 02 2021 Kevin Fenzi <kevin@scrye.com> - 2.25.1-1
+- Update 2.25.1. Fix is rhbz#1908487
+
 * Wed Jan 27 2021 Fedora Release Engineering <releng@fedoraproject.org> - 2.25.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
 
