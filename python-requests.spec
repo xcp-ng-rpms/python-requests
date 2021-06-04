@@ -1,4 +1,3 @@
-%global _without_tests 1
 %if 0%{?_module_build}
 # Don't run tests on module-build for now
 # See: https://bugzilla.redhat.com/show_bug.cgi?id=1450608
@@ -11,7 +10,7 @@
 
 Name:           python-requests
 Version:        2.25.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -106,6 +105,9 @@ sed -i 's/ --doctest-modules//' pytest.ini
 
 
 %changelog
+* Fri Jun 04 2021 Python Maint <python-maint@redhat.com> - 2.25.1-3
+- Rebuilt for Python 3.10
+
 * Wed Jun 02 2021 Python Maint <python-maint@redhat.com> - 2.25.1-2
 - Bootstrap for Python 3.10
 
