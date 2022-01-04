@@ -9,7 +9,7 @@
 
 
 Name:           python-requests
-Version:        2.26.0
+Version:        2.27.0
 Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
@@ -95,11 +95,7 @@ sed -i 's/ --doctest-modules//' pytest.ini
 
 %if %{with tests}
 %check
-# test_https_warnings: https://github.com/psf/requests/issues/5530
-# test_pyopenssl_redirect fails with: pytest-httpbin server hit
-# an exception serving request: [SSL: HTTP_REQUEST] http request (_ssl.c:997)
-# not yet sure why
-%pytest -v -k "not test_https_warnings and not test_pyopenssl_redirect"
+%pytest -v
 %endif
 
 
@@ -109,6 +105,11 @@ sed -i 's/ --doctest-modules//' pytest.ini
 
 
 %changelog
+* Tue Jan 04 2022 Adam Williamson <awilliam@redhat.com> - 2.27.0-1
+- Update to 2.27.0
+- Re-enable test_https_warnings as it works with pytest-httpbin 1.0.0 now
+- Re-enable test_pyopenssl_redirect, it seems to work too
+
 * Sun Jul 25 2021 Lumír Balhar <lbalhar@redhat.com> - 2.26.0-1
 - Update to 2.26.0
 Resolves: rhbz#1981856
