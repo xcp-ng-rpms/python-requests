@@ -9,7 +9,7 @@
 
 
 Name:           python-requests
-Version:        2.27.0
+Version:        2.27.1
 Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
@@ -105,6 +105,9 @@ sed -i 's/ --doctest-modules//' pytest.ini
 
 
 %changelog
+* Sat Jan 08 2022 Kevin Fenzi <kevin@scrye.com> - 2.27.1-1
+- Update to 2.27.1. Fixes rhbz#2037431
+
 * Tue Jan 04 2022 Adam Williamson <awilliam@redhat.com> - 2.27.0-1
 - Update to 2.27.0
 - Re-enable test_https_warnings as it works with pytest-httpbin 1.0.0 now
