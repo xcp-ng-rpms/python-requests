@@ -1,3 +1,4 @@
+%global _without_tests 1
 %if 0%{?_module_build}
 # Don't run tests on module-build for now
 # See: https://bugzilla.redhat.com/show_bug.cgi?id=1450608
@@ -10,7 +11,7 @@
 
 Name:           python-requests
 Version:        2.27.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -105,6 +106,9 @@ sed -i 's/ --doctest-modules//' pytest.ini
 
 
 %changelog
+* Mon Jun 13 2022 Python Maint <python-maint@redhat.com> - 2.27.1-3
+- Bootstrap for Python 3.11
+
 * Fri Jan 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 2.27.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
 
