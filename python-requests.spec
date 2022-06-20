@@ -10,7 +10,7 @@
 
 Name:           python-requests
 Version:        2.27.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -84,6 +84,10 @@ sed -i '/#!\/usr\/.*python/d' requests/certs.py
 # change the docs. Thus, we set pytest not to run doctests at all.
 sed -i 's/ --doctest-modules//' pytest.ini
 
+# Allow charset_normalizer 2.1.0 and newer up to 3.0.0
+# Backport of: https://github.com/psf/requests/pull/6169
+sed -i "s/charset_normalizer~=2.0.0/charset_normalizer~=2.0/" setup.py
+
 %build
 %pyproject_wheel
 
@@ -105,6 +109,9 @@ sed -i 's/ --doctest-modules//' pytest.ini
 
 
 %changelog
+* Mon Jun 20 2022 Lumír Balhar <lbalhar@redhat.com> - 2.27.1-5
+- Allow charset_normalizer 2.1.0 and newer up to 3.0.0
+
 * Tue Jun 14 2022 Python Maint <python-maint@redhat.com> - 2.27.1-4
 - Rebuilt for Python 3.11
 
