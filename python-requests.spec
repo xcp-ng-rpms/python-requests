@@ -9,8 +9,8 @@
 
 
 Name:           python-requests
-Version:        2.27.1
-Release:        5%{?dist}
+Version:        2.28.1
+Release:        1%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -18,17 +18,14 @@ URL:            https://pypi.io/project/requests
 Source0:        https://github.com/requests/requests/archive/v%{version}/requests-v%{version}.tar.gz
 # Explicitly use the system certificates in ca-certificates.
 # https://bugzilla.redhat.com/show_bug.cgi?id=904614
-Patch0:         patch-requests-certs.py-to-use-the-system-CA-bundle.patch
-
-# https://bugzilla.redhat.com/show_bug.cgi?id=1450608
-Patch2:         Remove-tests-that-use-the-tarpit.patch
+Patch0:         requests-2.28.1-system-certs.patch
 
 # Use 127.0.0.1 not localhost for socket.bind() in the Server test
 # class, to fix tests in Koji's no-network environment
 # This probably isn't really upstreamable, because I guess localhost
 # could technically be IPv6 or something, and our no-network env is
 # a pretty odd one so this is a niche requirement.
-Patch3:         requests-2.12.4-tests_nonet.patch
+Patch1:         requests-2.28.1-tests_nonet.patch
 
 BuildArch:      noarch
 
@@ -73,20 +70,14 @@ designed to make HTTP requests easy for developers.
 %prep
 %autosetup -p1 -n requests-%{version}
 
-# Unbundle the certificate bundle from mozilla.
-rm -rf requests/cacert.pem
-
 # env shebang in nonexecutable file
 sed -i '/#!\/usr\/.*python/d' requests/certs.py
 
 # Some doctests use the internet and fail to pass in Koji. Since doctests don't have names, I don't
 # know a way to skip them. We also don't want to patch them out, because patching them out will
 # change the docs. Thus, we set pytest not to run doctests at all.
-sed -i 's/ --doctest-modules//' pytest.ini
+sed -i 's/ --doctest-modules//' pyproject.toml
 
-# Allow charset_normalizer 2.1.0 and newer up to 3.0.0
-# Backport of: https://github.com/psf/requests/pull/6169
-sed -i "s/charset_normalizer~=2.0.0/charset_normalizer~=2.0/" setup.py
 
 %build
 %pyproject_wheel
@@ -99,7 +90,8 @@ sed -i "s/charset_normalizer~=2.0.0/charset_normalizer~=2.0/" setup.py
 
 %if %{with tests}
 %check
-%pytest -v
+# Omitted tests use a TARPIT server so require network connection
+%pytest -v -k "not (test_connect_timeout or test_total_timeout_connect)"
 %endif
 
 
@@ -109,6 +101,9 @@ sed -i "s/charset_normalizer~=2.0.0/charset_normalizer~=2.0/" setup.py
 
 
 %changelog
+* Tue Jul 12 2022 Adam Williamson <awilliam@redhat.com> - 2.28.1-1
+- Update to 2.28.1, rediff patches
+
 * Mon Jun 20 2022 Lumír Balhar <lbalhar@redhat.com> - 2.27.1-5
 - Allow charset_normalizer 2.1.0 and newer up to 3.0.0
 
