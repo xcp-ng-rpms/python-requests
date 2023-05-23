@@ -10,7 +10,7 @@
 
 Name:           python-requests
 Version:        2.28.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -26,6 +26,9 @@ Patch0:         requests-2.28.1-system-certs.patch
 # could technically be IPv6 or something, and our no-network env is
 # a pretty odd one so this is a niche requirement.
 Patch1:         requests-2.28.1-tests_nonet.patch
+
+# Security fix for CVE-2023-32681
+Patch2:         https://github.com/psf/requests/commit/74ea7cf7a6.patch#/CVE-2023-32681.patch
 
 BuildArch:      noarch
 
@@ -101,6 +104,10 @@ sed -i 's/ --doctest-modules//' pyproject.toml
 
 
 %changelog
+* Tue May 23 2023 Miro Hrončok <mhroncok@redhat.com> - 2.28.1-3
+- Security fix for CVE-2023-32681
+- https://github.com/psf/requests/security/advisories/GHSA-j8r2-6x86-q33q
+
 * Fri Jul 22 2022 Fedora Release Engineering <releng@fedoraproject.org> - 2.28.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
 
