@@ -1,7 +1,7 @@
 %global package_speccommit 568771e8be262d8ff0d739ab760ad6c8a808e81f
 %global usver 2.28.1
 %global xsver 4
-%global xsrel %{xsver}%{?xscount}%{?xshash}
+%global xsrel %{xsver}.1%{?xscount}%{?xshash}
 # When bootstrapping Python, we cannot test this yet
 %bcond_with tests
 
@@ -81,7 +81,7 @@ echo "from setuptools import setup
 setup(name=\"%{name}\",
       version='%{version}',
      )" > ./setup.py
-/usr/bin/python3 -Bs %{SOURCE1} /builddir/build /BUILD/requests-%{version}/pyproject-wheeldir
+/usr/bin/python3 -Bs %{SOURCE1} %{_builddir}/requests-%{version}/pyproject-wheeldir
 %else
 %pyproject_wheel
 %endif
@@ -89,7 +89,7 @@ setup(name=\"%{name}\",
 
 %install
 %if 0%{?xenserver} < 9
-/usr/bin/python3 -m pip install --root %{buildroot} --prefix /usr --no-deps --disable-pip-version-check --verbose --ignore-installed --no-index --no-cache-dir --find-links /builddir/build/BUILD/requests-%{version}/pyproject-wheeldir
+/usr/bin/python3 -m pip install --root %{buildroot} --prefix /usr --no-deps --disable-pip-version-check --verbose --ignore-installed --no-index --no-cache-dir --find-links %{_builddir}/requests-%{version}/pyproject-wheeldir
 %else
 %pyproject_install
 %pyproject_save_files requests
@@ -161,6 +161,9 @@ find %{buildroot}%{python3_sitelib}/requests
 
 
 %changelog
+* Thu Jan 23 2025 Yann Dirson <yann.dirson@vates.tech> - 2.28.1-4.1
+- Fix build invocation using hardcoded (and buggy) paths
+
 * Mon Aug 19 2024 Marcus Granado <marcus.granado@cloud.com> - 2.28.1-4
 - Bump release and rebuild
 
