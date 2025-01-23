@@ -45,6 +45,9 @@ BuildRequires:  python3dist(pytest-mock)
 BuildRequires:  python3dist(trustme)
 %endif
 
+Requires:       python3-charset-normalizer
+Requires:       python3-idna
+Requires:       python3-urllib3
 
 %description -n python%{python3_pkgversion}-requests
 Most existing Python modules for sending HTTP requests are extremely verbose and
@@ -53,13 +56,6 @@ capabilities you should need, but the API is thoroughly broken. This library is
 designed to make HTTP requests easy for developers.
 
 %pyproject_extras_subpkg -n python%{python3_pkgversion}-requests security socks
-
-%generate_buildrequires
-%if %{with tests}
-%pyproject_buildrequires -r
-%else
-%pyproject_buildrequires
-%endif
 
 
 %prep
@@ -163,6 +159,8 @@ find %{buildroot}%{python3_sitelib}/requests
 %changelog
 * Thu Jan 23 2025 Yann Dirson <yann.dirson@vates.tech> - 2.28.1-4.1
 - Fix build invocation using hardcoded (and buggy) paths
+- Remove macros undefined and/or (not) expanding inside the package description
+- Add missing requires (taken from XS' python-opentelemetry.spec)
 
 * Mon Aug 19 2024 Marcus Granado <marcus.granado@cloud.com> - 2.28.1-4
 - Bump release and rebuild
