@@ -1,0 +1,11 @@
+--- requests-2.28.1/tests/testserver/server.py	2022-06-29 08:09:11.000000000 -0700
++++ requests-2.28.1/tests/testserver/server.py.new	2022-07-12 14:04:30.218077055 -0700
+@@ -29,7 +29,7 @@
+     def __init__(
+         self,
+         handler=None,
+-        host="localhost",
++        host="127.0.0.1",
+         port=0,
+         requests_to_handle=1,
+         wait_to_close_event=None,
